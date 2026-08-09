@@ -1,34 +1,74 @@
 .majkey-segment-skip-button {
-  --segment-color: #ffffff;
   position: absolute;
-  right: 24px;
-  bottom: 82px;
+  right: 18px;
+  bottom: 78px;
   z-index: 70;
-  min-width: 150px;
-  padding: 12px 18px;
-  border: 2px solid var(--segment-color);
-  border-radius: 4px;
-  background: rgba(15, 15, 15, 0.92);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 14px 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 2px;
+  background: rgba(28, 28, 28, 0.88);
   color: #fff;
-  font: 600 15px/1.2 Roboto, Arial, sans-serif;
-  letter-spacing: 0.2px;
+  font: 500 14px/1 Roboto, Arial, sans-serif;
+  letter-spacing: 0.1px;
   text-align: center;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(6px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(2px);
 }
 
 .majkey-segment-skip-button:hover {
-  background: rgba(35, 35, 35, 0.96);
+  background: rgba(50, 50, 50, 0.94);
+}
+
+.majkey-segment-skip-button:active {
+  background: rgba(64, 64, 64, 0.96);
 }
 
 .majkey-segment-skip-button:focus-visible {
-  outline: 3px solid #fff;
+  outline: 2px solid #fff;
   outline-offset: 2px;
 }
 
 .majkey-segment-skip-button[hidden] {
   display: none !important;
+}
+
+.majkey-segment-skip-text {
+  white-space: nowrap;
+}
+
+.majkey-segment-skip-icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+}
+
+.majkey-segment-skip-icon::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 1px;
+  width: 6px;
+  height: 6px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.majkey-segment-skip-icon::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 1px;
+  width: 2px;
+  height: 10px;
+  border-radius: 1px;
+  background: currentColor;
 }
 
 .majkey-segment-toast {
@@ -69,7 +109,10 @@
   pointer-events: none;
 }
 
-.ytp-fullscreen .majkey-segment-skip-button,
+.ytp-fullscreen .majkey-segment-skip-button {
+  bottom: 94px;
+}
+
 .ytp-fullscreen .majkey-segment-toast {
   bottom: 96px;
 }
