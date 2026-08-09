@@ -78,7 +78,7 @@ test('sanitizeSettings migrates v1.0.1 flat settings into nested settings', () =
   assert.equal(settings.youtube.categories.intro, 'ignore');
   assert.equal(settings.adguard.enabled, true);
   assert.equal(settings.adguard.scope, 'youtube');
-  assert.deepEqual(settings.adguard.filterIds, [2, 3, 17]);
+  assert.deepEqual(settings.adguard.filterIds, [2, 3, 17, 105]);
   assert.deepEqual(settings.adguard.allowlist, []);
   assert.deepEqual(settings.adguard.rules, []);
   assert.equal(settings.theme, 'light');
@@ -117,8 +117,18 @@ test('sanitizeSettings validates nested settings and is idempotent', () => {
   assert.deepEqual(settings.adguard.rules, ['example.com##.ad']);
   assert.equal(settings.theme, 'system');
   assert.deepEqual(Settings.sanitizeSettings(settings), settings);
-  assert.deepEqual(Settings.RECOMMENDED_FILTER_IDS, [2, 3, 17]);
+  assert.deepEqual(Settings.RECOMMENDED_FILTER_IDS, [2, 3, 17, 105]);
   assert.deepEqual(Settings.AD_BLOCK_SCOPES, ['global', 'youtube']);
+});
+
+test('sanitizeSettings preserves existing explicit filter selections', () => {
+  const settings = Settings.sanitizeSettings({
+    adguard: {
+      filterIds: [18, 2, 18]
+    }
+  });
+
+  assert.deepEqual(settings.adguard.filterIds, [2, 18]);
 });
 
 test('activeCategories reads the nested YouTube category model', () => {
@@ -237,16 +247,28 @@ test('AdGuard request log deduplicates request IDs and stays bounded', () => {
   assert.deepEqual(log.map((entry) => entry.requestId), ['b', 'c']);
 });
 
-test('AdGuard filter helpers validate catalog IDs and recommended defaults', () => {
+test('AdGuard filter helpers validate catalog IDs and named presets', () => {
   const AdguardFilters = requireProjectModule('lib/adguard-filters.js');
   const catalog = [
     { id: 2, name: 'Base', group: 'Ad blocking' },
     { id: 3, name: 'Tracking', group: 'Privacy' },
     { id: 17, name: 'URL Tracking', group: 'Privacy' },
-    { id: 18, name: 'Cookie Notices', group: 'Annoyances' }
+    { id: 18, name: 'Cookie Notices', group: 'Annoyances' },
+    { id: 19, name: 'Popups', group: 'Annoyances' },
+    { id: 20, name: 'Mobile App Banners', group: 'Annoyances' },
+    { id: 21, name: 'Other Annoyances', group: 'Annoyances' },
+    { id: 22, name: 'Widgets', group: 'Annoyances' },
+    { id: 105, name: 'EasyList Czech and Slovak', group: 'Language-specific' }
   ];
 
   assert.deepEqual(AdguardFilters.sanitizeFilterIds([18, 2, 2, 999], catalog), [2, 18]);
-  assert.deepEqual(AdguardFilters.defaultFilterIds(catalog), [2, 3, 17]);
-  assert.deepEqual(Object.keys(AdguardFilters.groupCatalog(catalog)), ['Ad blocking', 'Privacy', 'Annoyances']);
+  assert.deepEqual(AdguardFilters.defaultFilterIds(catalog), [2, 3, 17, 105]);
+  assert.deepEqual(AdguardFilters.filterIdsForPreset('minimal'), [2]);
+  assert.deepEqual(AdguardFilters.filterIdsForPreset('recommended'), [2, 3, 17, 105]);
+  assert.deepEqual(AdguardFilters.filterIdsForPreset('strict'), [2, 3, 17, 18, 19, 20, 21, 22, 105]);
+  assert.equal(AdguardFilters.presetForFilterIds([2]), 'minimal');
+  assert.equal(AdguardFilters.presetForFilterIds([105, 17, 3, 2]), 'recommended');
+  assert.equal(AdguardFilters.presetForFilterIds([2, 18]), 'custom');
+  assert.equal(AdguardFilters.presetForFilterIds([]), 'custom');
+  assert.deepEqual(Object.keys(AdguardFilters.groupCatalog(catalog)), ['Ad blocking', 'Privacy', 'Annoyances', 'Language-specific']);
 });

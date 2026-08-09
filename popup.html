@@ -103,6 +103,25 @@
           <div><strong id="rulesCount">0</strong><span>Loaded rules</span></div>
           <div><strong id="rulesetQuota">0 / 0</strong><span>Ruleset quota</span></div>
         </div>
+        <div class="preset-row">
+          <label for="filterPreset">
+            <strong>Preset</strong>
+            <small>Quick profiles. Manual filter changes are shown as Custom.</small>
+          </label>
+          <select id="filterPreset" aria-describedby="filterPresetHelp">
+            <option value="minimal">Minimal</option>
+            <option value="recommended">Recommended</option>
+            <option value="strict">Strict</option>
+            <option value="custom" disabled>Custom</option>
+          </select>
+        </div>
+        <p id="filterPresetHelp" class="helper preset-help">Balanced ads, tracking protection, URL tracking cleanup, and Czech/Slovak coverage.</p>
+        <div class="preset-docs" aria-label="Filter preset descriptions">
+          <small><strong>Minimal</strong> Core ad blocking with the smallest ruleset footprint.</small>
+          <small><strong>Recommended</strong> Balanced ads, tracking protection, URL tracking cleanup, and Czech/Slovak coverage.</small>
+          <small><strong>Strict</strong> Recommended plus cookie notices, popups, mobile app banners, other annoyances, and widgets. May break more sites.</small>
+          <small><strong>Custom</strong> Your manually selected filter combination.</small>
+        </div>
         <input id="filterSearch" class="text-input" type="search" placeholder="Search filters" autocomplete="off">
         <div id="filterList" class="filter-list" aria-label="AdGuard filters"></div>
       </details>

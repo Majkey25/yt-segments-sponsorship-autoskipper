@@ -390,6 +390,55 @@ textarea {
   font-size: 9px;
 }
 
+.preset-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 2px 0 6px;
+}
+
+.preset-row label {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.preset-row strong {
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.preset-row small,
+.preset-docs small {
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.preset-row select {
+  width: 140px;
+  flex: 0 0 auto;
+}
+
+.preset-help {
+  margin: 0 0 7px;
+}
+
+.preset-docs {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 8px;
+  padding: 7px 8px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--bg);
+}
+
+.preset-docs strong {
+  color: var(--text);
+}
+
 .filter-list {
   max-height: 230px;
   overflow-y: auto;
