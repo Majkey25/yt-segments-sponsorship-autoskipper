@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blocked by AdGuard</title>
+  <link rel="stylesheet" href="blocking-page.css">
+</head>
+<body>
+  <main class="blocking-card">
+    <div class="eyebrow">ADGUARD PROTECTION</div>
+    <h1>Page blocked</h1>
+    <p class="lead">A document filtering rule blocked this destination.</p>
+
+    <dl>
+      <div>
+        <dt>Destination</dt>
+        <dd id="blockedUrl">Unknown</dd>
+      </div>
+      <div>
+        <dt>Rule</dt>
+        <dd id="blockedRule">Unknown</dd>
+      </div>
+      <div>
+        <dt>Filter</dt>
+        <dd id="blockedFilter">Unknown</dd>
+      </div>
+    </dl>
+
+    <div class="actions">
+      <button id="goBack" type="button">Go back</button>
+      <button id="allowSite" type="button" hidden>Allow this site and continue</button>
+    </div>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </main>
+  <script src="lib/adguard-utils.js"></script>
+  <script src="blocking-page.js"></script>
+</body>
+</html>
