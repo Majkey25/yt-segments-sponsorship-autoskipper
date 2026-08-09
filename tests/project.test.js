@@ -135,6 +135,24 @@ test('AdGuard filter presets are documented and wired through the existing setti
   assert.match(popupAdguard, /applyAdguard/);
 });
 
+test('manual segment skip button uses native-like structure and neutral styling', () => {
+  const content = readText('content.js');
+  const css = readText('content.css');
+
+  assert.match(content, /majkey-segment-skip-text/);
+  assert.match(content, /majkey-segment-skip-icon/);
+  assert.doesNotMatch(content, /style\.setProperty\('--segment-color'/);
+  assert.doesNotMatch(css, /var\(--segment-color\)/);
+  assert.match(css, /\.majkey-segment-skip-button\s*\{[\s\S]*display:\s*inline-flex/);
+  assert.match(css, /border:\s*1px solid rgba\(/);
+  assert.match(css, /background:\s*rgba\(/);
+  assert.match(css, /font:\s*500 14px\/1 Roboto/);
+  assert.match(css, /\.majkey-segment-skip-icon::before/);
+  assert.match(css, /\.majkey-segment-skip-icon::after/);
+  assert.match(css, /\.majkey-segment-skip-button:focus-visible/);
+  assert.match(css, /\.ytp-fullscreen \.majkey-segment-skip-button/);
+});
+
 test('background exposes all public AdGuard API operations and dashboard messages', () => {
   const background = readText('src/background.js');
 
