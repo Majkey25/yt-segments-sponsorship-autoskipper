@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "YT Segments & Sponsor Autoskipper",
   "short_name": "YT Autoskipper",
-  "version": "1.0.0",
-  "description": "Skip sponsors and other SponsorBlock segments, plus block YouTube ads with AdGuard MV3 rules.",
+  "version": "1.0.1",
+  "description": "Skip SponsorBlock segments on YouTube and block ads globally with AdGuard MV3 rules.",
   "minimum_chrome_version": "121",
   "permissions": [
     "storage",
@@ -40,10 +40,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.youtube.com/*",
-        "https://youtube.com/*",
-        "https://*.youtube-nocookie.com/*",
-        "https://youtube-nocookie.com/*"
+        "<all_urls>"
       ],
       "js": [
         "adguard-content.js"
