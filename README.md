@@ -25,7 +25,7 @@
 
 > **Important:** use the ZIP from **Releases → Assets**. Do not use GitHub's automatically generated **Source code** ZIP and do not load the repository source folder directly in Chrome. Runtime bundles such as `adguard-content.js`, `adguard-assistant.js`, the generated filter catalog, and packaged AdGuard rules are created during the release build.
 
-Chrome cannot install an unsigned ZIP directly. Extract it first, then load the extracted folder through Developer mode.
+The **GitHub Release ZIP** remains a supported fallback distribution path. Chrome cannot install an unsigned ZIP directly, so extract it first and load the extracted folder through Developer mode.
 
 ## Install in Chrome
 
@@ -51,6 +51,8 @@ The **YouTube Segments** tab contains the video-specific behavior:
 - skip notices,
 - reset to safe defaults.
 
+Manual segment skips use a **native-like** YouTube player control with neutral styling and a skip icon. The extension owns the button markup and styling rather than depending on private YouTube control classes.
+
 The UI uses product-owned names. Segment data is still provided by SponsorBlock and is credited in the popup, README, NOTICE, and source.
 
 ### AdGuard tab
@@ -61,6 +63,7 @@ The **AdGuard tab** is a browser-side control center for the capabilities expose
 - optional **YouTube only** scope,
 - current-site protection toggle backed by the allowlist,
 - packaged filter list selection,
+- quick filter presets,
 - loaded rule count and ruleset quota visibility,
 - editable allowlist,
 - editable custom user rules,
@@ -70,15 +73,26 @@ The **AdGuard tab** is a browser-side control center for the capabilities expose
 - current configuration state and sanitized diagnostics,
 - document blocking page support for `$document` rules.
 
-The build discovers the Chromium MV3 rulesets shipped by the current `@adguard/dnr-rulesets` package, declares up to Chrome's static ruleset manifest limit, and keeps a conservative recommended default set enabled. Filter selections are still subject to Chromium runtime rule and ruleset quotas.
+The build discovers the Chromium MV3 rulesets shipped by the current `@adguard/dnr-rulesets` package, declares up to Chrome's static ruleset manifest limit, and enables a balanced recommended default for new configurations. Filter selections are still subject to Chromium runtime rule and ruleset quotas.
 
 ## AdGuard controls
 
-### Filters
+### Filters and presets
 
 The extension generates `filters/catalog.json` at build time from the packaged AdGuard Chromium MV3 rulesets. Available filters can include ad blocking, privacy and tracking, URL tracking, cookie notices, annoyances, security lists, mobile filters, language-specific filters, and other lists present in the upstream package.
 
-The UI does not invent filters that were not packaged in the release.
+The popup provides four preset states:
+
+| Preset | Filter IDs | Purpose |
+| --- | --- | --- |
+| **Minimal** | `2` | Core ad blocking with the smallest ruleset footprint. |
+| **Recommended** | `2, 3, 17, 105` | Balanced ads, tracking protection, URL tracking cleanup, and Czech/Slovak site coverage. This is the default for new configurations and settings restored to defaults. |
+| **Strict** | `2, 3, 17, 18, 19, 20, 21, 22, 105` | Recommended plus cookie notices, popups, mobile app banners, other annoyances, and widgets. This can break more sites. |
+| **Custom** | User selected | Shown automatically when the enabled filters do not exactly match a named preset. |
+
+Updating to v1.2.0 does **not** silently replace an existing saved filter selection. Existing choices remain intact until you select another preset or change filter checkboxes yourself.
+
+The UI does not invent filters that were not packaged in the release. A named preset is applied only when all of its required filters exist in the packaged catalog.
 
 ### Allowlist
 
@@ -152,7 +166,7 @@ The AdGuard request log is session-only and bounded. No analytics or telemetry a
 
 GitHub Releases cannot silently update an extension installed with **Load unpacked**.
 
-1. Download the newest release ZIP.
+1. Download the newest GitHub Release ZIP.
 2. Replace the files in your existing extension folder.
 3. Open `chrome://extensions`.
 4. Click the reload button on the extension card.
@@ -172,11 +186,11 @@ The unpacked extension is generated in `dist/extension/` and release ZIPs are ge
 
 ## Tests
 
-The Node test suite covers settings migration, segment parsing, AdGuard configuration, allowlist normalization, request-log deduplication, filter catalog validation, two-tab popup contracts, Assistant and blocking-page packaging, manifest scope, and release metadata.
+The Node test suite covers settings migration, segment parsing, AdGuard configuration, preset behavior, allowlist normalization, request-log deduplication, filter catalog validation, two-tab popup contracts, native-like player controls, Assistant and blocking-page packaging, manifest scope, and release metadata.
 
 ## Releases and filter refresh
 
-GitHub Actions runs tests, builds fresh AdGuard DNR assets, packages the extension, verifies the archive root, and publishes both stable and versioned release ZIPs. The release workflow also refreshes packaged filter assets on schedule.
+GitHub Actions runs tests, builds fresh AdGuard DNR assets, packages the extension, verifies the archive root, and publishes both stable and versioned GitHub Release ZIP assets. The existing release path remains available as the fallback installation method.
 
 ## Attribution
 
