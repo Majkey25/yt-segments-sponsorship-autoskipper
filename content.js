@@ -45,7 +45,7 @@ function checkContext(forceReload) {
   if (forceReload || nextVideoID !== state.videoID) {
     state.videoID = nextVideoID;
     reloadCurrentVideo();
-  } else if (state.settings.showMarkers && state.segments.length > 0 && !state.markerLayer?.isConnected) {
+  } else if (state.settings.youtube.showMarkers && state.segments.length > 0 && !state.markerLayer?.isConnected) {
     renderMarkers();
   }
 }
@@ -77,7 +77,7 @@ async function reloadCurrentVideo() {
   hideSkipButton();
   clearMarkers();
 
-  if (!state.settings.enabled || !state.videoID) {
+  if (!state.settings.youtube.enabled || !state.videoID) {
     return;
   }
 
@@ -98,11 +98,11 @@ async function reloadCurrentVideo() {
     }
 
     if (!response?.ok) {
-      throw new Error(response?.error || 'Failed to load SponsorBlock segments');
+      throw new Error(response?.error || 'Failed to load segment data');
     }
 
     state.segments = SegmentUtils.normalizeSegments(response.segments)
-      .filter((segment) => state.settings.categories[segment.category] !== 'ignore');
+      .filter((segment) => state.settings.youtube.categories[segment.category] !== 'ignore');
 
     renderMarkers();
     handlePlaybackPosition();
@@ -116,7 +116,7 @@ async function reloadCurrentVideo() {
 
 function handlePlaybackPosition() {
   const video = state.video;
-  if (!video || !state.settings.enabled || state.segments.length === 0) {
+  if (!video || !state.settings.youtube.enabled || state.segments.length === 0) {
     hideSkipButton();
     return;
   }
@@ -133,7 +133,7 @@ function handlePlaybackPosition() {
   }
 
   const autoSegment = active.find(
-    (segment) => state.settings.categories[segment.category] === 'auto'
+    (segment) => state.settings.youtube.categories[segment.category] === 'auto'
   );
 
   if (autoSegment) {
@@ -146,7 +146,7 @@ function handlePlaybackPosition() {
   }
 
   const buttonSegment = active.find(
-    (segment) => state.settings.categories[segment.category] === 'button'
+    (segment) => state.settings.youtube.categories[segment.category] === 'button'
   );
 
   if (buttonSegment) {
@@ -166,7 +166,7 @@ function skipSegment(segment, automatic) {
   video.currentTime = segment.end;
   hideSkipButton();
 
-  if (state.settings.showToast) {
+  if (state.settings.youtube.showToast) {
     const prefix = automatic ? 'Skipped' : 'Skipped';
     showToast(`${prefix} ${labelForCategory(segment.category)} · ${SegmentUtils.secondsLabel(skippedSeconds)}`);
   }
@@ -229,7 +229,7 @@ function renderMarkers() {
   clearMarkers();
 
   const video = state.video;
-  if (!state.settings.showMarkers || !video || !Number.isFinite(video.duration) || video.duration <= 0) {
+  if (!state.settings.youtube.showMarkers || !video || !Number.isFinite(video.duration) || video.duration <= 0) {
     return;
   }
 

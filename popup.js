@@ -1,121 +1,114 @@
-const enabledInput = document.getElementById('enabled');
-const adBlockInput = document.getElementById('adBlockEnabled');
-const adBlockScopeInput = document.getElementById('adBlockScope');
-const adBlockScopeStatus = document.getElementById('adBlockScopeStatus');
-const adBlockScopeCopy = document.getElementById('adBlockScopeCopy');
-const markersInput = document.getElementById('showMarkers');
-const toastInput = document.getElementById('showToast');
-const themeInput = document.getElementById('theme');
-const categoriesContainer = document.getElementById('categories');
-const resetButton = document.getElementById('reset');
 const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+const tabButtons = [...document.querySelectorAll('[role="tab"]')];
+const tabPanels = [...document.querySelectorAll('[role="tabpanel"]')];
+const themeInput = document.getElementById('theme');
 
-let settings;
+let settings = SegmentSettings.sanitizeSettings();
 
-init();
+window.PopupApp = {
+  getSettings: () => settings,
+  setSettings(next) {
+    settings = SegmentSettings.sanitizeSettings(next);
+  },
+  saveSettings,
+  setStatus,
+  applyTheme,
+  activateTab
+};
+
+window.addEventListener('DOMContentLoaded', init);
 
 async function init() {
   const stored = await chrome.storage.sync.get('settings');
   settings = SegmentSettings.sanitizeSettings(stored.settings);
-  render();
+  await chrome.storage.sync.set({ settings });
 
-  enabledInput.addEventListener('change', saveFromControls);
-  adBlockInput.addEventListener('change', saveFromControls);
-  adBlockScopeInput.addEventListener('change', saveFromControls);
-  markersInput.addEventListener('change', saveFromControls);
-  toastInput.addEventListener('change', saveFromControls);
-  themeInput.addEventListener('change', saveFromControls);
-  resetButton.addEventListener('click', resetDefaults);
+  themeInput.value = settings.theme;
+  applyTheme(settings.theme);
+  themeInput.addEventListener('change', saveTheme);
   systemTheme.addEventListener('change', () => {
     if (settings.theme === 'system') {
       applyTheme('system');
     }
   });
-}
 
-function render() {
-  enabledInput.checked = settings.enabled;
-  adBlockInput.checked = settings.adBlockEnabled;
-  adBlockScopeInput.value = settings.adBlockScope;
-  markersInput.checked = settings.showMarkers;
-  toastInput.checked = settings.showToast;
-  themeInput.value = settings.theme;
-  applyTheme(settings.theme);
-  renderAdBlockScope();
-  categoriesContainer.replaceChildren();
-
-  for (const [name, definition] of Object.entries(SegmentSettings.CATEGORY_DEFINITIONS)) {
-    const row = document.createElement('label');
-    row.className = 'category-row';
-
-    const identity = document.createElement('span');
-    identity.className = 'category-identity';
-
-    const dot = document.createElement('span');
-    dot.className = 'dot';
-    dot.style.background = definition.color;
-
-    const label = document.createElement('span');
-    label.textContent = definition.label;
-
-    identity.append(dot, label);
-
-    const select = document.createElement('select');
-    select.dataset.category = name;
-    select.setAttribute('aria-label', `${definition.label} behavior`);
-    select.append(
-      option('auto', 'Auto skip'),
-      option('button', 'Show button'),
-      option('ignore', 'Ignore')
-    );
-    select.value = settings.categories[name];
-    select.addEventListener('change', saveFromControls);
-
-    row.append(identity, select);
-    categoriesContainer.appendChild(row);
-  }
-}
-
-function option(value, label) {
-  const item = document.createElement('option');
-  item.value = value;
-  item.textContent = label;
-  return item;
-}
-
-async function saveFromControls() {
-  const categories = { ...settings.categories };
-  for (const select of categoriesContainer.querySelectorAll('select[data-category]')) {
-    categories[select.dataset.category] = select.value;
+  for (const button of tabButtons) {
+    button.addEventListener('click', () => activateTab(button.id));
+    button.addEventListener('keydown', handleTabKeydown);
   }
 
-  settings = SegmentSettings.sanitizeSettings({
-    enabled: enabledInput.checked,
-    adBlockEnabled: adBlockInput.checked,
-    adBlockScope: adBlockScopeInput.value,
-    showMarkers: markersInput.checked,
-    showToast: toastInput.checked,
-    theme: themeInput.value,
-    categories
+  const local = await chrome.storage.local.get('popupTab');
+  const initialTab = local.popupTab === 'adguardTab' ? 'adguardTab' : 'youtubeTab';
+  activateTab(initialTab, false);
+
+  await window.PopupYoutube?.init?.();
+  await window.PopupAdguard?.init?.();
+
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName !== 'sync' || !changes.settings) {
+      return;
+    }
+    settings = SegmentSettings.sanitizeSettings(changes.settings.newValue);
+    themeInput.value = settings.theme;
+    applyTheme(settings.theme);
+    window.PopupYoutube?.render?.();
+    window.PopupAdguard?.renderSettings?.();
   });
-
-  applyTheme(settings.theme);
-  renderAdBlockScope();
-  await chrome.storage.sync.set({ settings });
 }
 
-async function resetDefaults() {
-  settings = SegmentSettings.sanitizeSettings(SegmentSettings.DEFAULT_SETTINGS);
+async function saveSettings(next) {
+  settings = SegmentSettings.sanitizeSettings(next);
   await chrome.storage.sync.set({ settings });
-  render();
+  return settings;
 }
 
-function renderAdBlockScope() {
-  const globalScope = settings.adBlockScope === 'global';
-  adBlockScopeStatus.textContent = globalScope ? 'Global' : 'YouTube only';
-  adBlockScopeCopy.textContent = globalScope
-    ? 'Blocks ads across all websites using AdGuard filters'
-    : 'AdGuard filtering is restricted to YouTube';
+async function saveTheme() {
+  const next = SegmentSettings.sanitizeSettings({
+    ...settings,
+    theme: themeInput.value
+  });
+  await saveSettings(next);
+  applyTheme(next.theme);
+}
+
+function activateTab(tabId, persist = true) {
+  const active = tabButtons.find((button) => button.id === tabId) || tabButtons[0];
+
+  for (const button of tabButtons) {
+    const selected = button === active;
+    button.classList.toggle('is-active', selected);
+    button.setAttribute('aria-selected', String(selected));
+    button.tabIndex = selected ? 0 : -1;
+  }
+
+  for (const panel of tabPanels) {
+    panel.hidden = panel.getAttribute('aria-labelledby') !== active.id;
+  }
+
+  if (persist) {
+    void chrome.storage.local.set({ popupTab: active.id });
+  }
+}
+
+function handleTabKeydown(event) {
+  if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+    return;
+  }
+  event.preventDefault();
+  const currentIndex = tabButtons.indexOf(event.currentTarget);
+  const direction = event.key === 'ArrowRight' ? 1 : -1;
+  const nextIndex = (currentIndex + direction + tabButtons.length) % tabButtons.length;
+  tabButtons[nextIndex].focus();
+  activateTab(tabButtons[nextIndex].id);
+}
+
+function setStatus(message, type = 'info') {
+  const status = document.getElementById('adguardStatus');
+  if (!status) {
+    return;
+  }
+  status.textContent = message || '';
+  status.dataset.type = type;
 }
 
 function applyTheme(theme) {

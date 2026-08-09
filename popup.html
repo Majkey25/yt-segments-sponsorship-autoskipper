@@ -12,79 +12,176 @@
       <div class="brand">
         <img src="icons/icon-48.png" width="42" height="42" alt="">
         <div>
-          <div class="eyebrow">YOUTUBE CLEANUP</div>
+          <div class="eyebrow">BROWSER CLEANUP</div>
           <h1>YT Autoskipper</h1>
-          <p>Sponsors, filler and ads. Gone.</p>
+          <p>YouTube segments plus global AdGuard protection.</p>
         </div>
       </div>
-      <label class="switch" title="Enable or disable SponsorBlock segment skipping">
-        <input id="enabled" type="checkbox" aria-label="Enable segment skipping">
-        <span></span>
-      </label>
+      <select id="theme" class="theme-select" aria-label="Popup theme">
+        <option value="system">System</option>
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+      </select>
     </header>
 
-    <section class="protection" aria-labelledby="protection-title">
+    <nav class="tabs" role="tablist" aria-label="Extension sections">
+      <button id="youtubeTab" class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="youtubePanel">YouTube Segments</button>
+      <button id="adguardTab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="adguardPanel">AdGuard</button>
+    </nav>
+
+    <section id="youtubePanel" class="tab-panel" role="tabpanel" aria-labelledby="youtubeTab">
       <div class="section-heading">
-        <span id="protection-title">Protection</span>
-        <span id="adBlockScopeStatus" class="section-note">Global</span>
+        <span>YouTube Segments</span>
+        <span class="section-note">YouTube only</span>
       </div>
 
       <label class="feature-row">
         <span class="feature-copy">
-          <strong>Ad Block</strong>
-          <small id="adBlockScopeCopy">Blocks ads across all websites using AdGuard filters</small>
+          <strong>Segment skipping</strong>
+          <small>Skip or surface community-reported video sections.</small>
         </span>
-        <span class="switch switch-small">
-          <input id="adBlockEnabled" type="checkbox">
+        <span class="switch">
+          <input id="youtubeEnabled" type="checkbox" aria-label="Enable YouTube segment skipping">
           <span></span>
         </span>
       </label>
-
-      <div class="option-row">
-        <label for="theme">Theme</label>
-        <select id="theme" aria-label="Popup theme">
-          <option value="system">System</option>
-          <option value="dark">Dark</option>
-          <option value="light">Light</option>
-        </select>
-      </div>
 
       <div class="inline-options">
         <label><input id="showMarkers" type="checkbox"> Timeline markers</label>
         <label><input id="showToast" type="checkbox"> Skip notices</label>
       </div>
 
-      <details class="advanced" id="advancedSettings">
-        <summary id="advancedToggle">Advanced settings</summary>
-        <div class="option-row advanced-row">
-          <label for="adBlockScope">Ad blocking scope</label>
-          <select id="adBlockScope" aria-label="Ad blocking scope">
+      <div class="subheading">Segment behavior</div>
+      <div id="categories" class="categories"></div>
+      <div class="section-actions">
+        <button id="youtubeReset" type="button">Reset segment defaults</button>
+      </div>
+    </section>
+
+    <section id="adguardPanel" class="tab-panel" role="tabpanel" aria-labelledby="adguardTab" hidden>
+      <section class="dashboard-section">
+        <div class="section-heading">
+          <span>Protection</span>
+          <span id="adguardEngineState" class="section-note">Loading</span>
+        </div>
+
+        <label class="feature-row">
+          <span class="feature-copy">
+            <strong>AdGuard protection</strong>
+            <small>Network and cosmetic filtering using packaged MV3 rules.</small>
+          </span>
+          <span class="switch">
+            <input id="adguardEnabled" type="checkbox" aria-label="Enable AdGuard protection">
+            <span></span>
+          </span>
+        </label>
+
+        <div class="option-row">
+          <label for="adguardScope">Filtering scope</label>
+          <select id="adguardScope">
             <option value="global">Global</option>
             <option value="youtube">YouTube only</option>
           </select>
         </div>
-      </details>
-    </section>
 
-    <section class="segments" aria-labelledby="segments-title">
-      <div class="section-heading">
-        <span id="segments-title">Segment behavior</span>
-        <span class="section-note">SponsorBlock</span>
-      </div>
-      <div id="categories" class="categories"></div>
+        <label class="feature-row compact-row">
+          <span class="feature-copy">
+            <strong>Protect current site</strong>
+            <small id="currentSiteLabel">No supported page selected.</small>
+          </span>
+          <span class="switch switch-small">
+            <input id="currentSiteProtection" type="checkbox" aria-label="Protect current site">
+            <span></span>
+          </span>
+        </label>
+      </section>
+
+      <details class="dashboard-section" open>
+        <summary>Filters</summary>
+        <div class="metrics-grid">
+          <div><strong id="enabledFilterCount">0</strong><span>Enabled filters</span></div>
+          <div><strong id="rulesCount">0</strong><span>Loaded rules</span></div>
+          <div><strong id="rulesetQuota">0 / 0</strong><span>Ruleset quota</span></div>
+        </div>
+        <input id="filterSearch" class="text-input" type="search" placeholder="Search filters" autocomplete="off">
+        <div id="filterList" class="filter-list" aria-label="AdGuard filters"></div>
+      </details>
+
+      <details class="dashboard-section">
+        <summary>Allowlist</summary>
+        <p class="helper">One domain per line. Allowlisted sites are excluded from Global filtering.</p>
+        <textarea id="allowlistEditor" rows="5" spellcheck="false" placeholder="example.com"></textarea>
+        <div class="button-row">
+          <button id="allowlistApply" type="button">Apply</button>
+          <button id="allowlistCurrentSite" type="button">Allow current site</button>
+          <button id="allowlistCopy" type="button">Copy</button>
+        </div>
+      </details>
+
+      <details class="dashboard-section">
+        <summary>User rules</summary>
+        <p class="helper">Custom AdGuard filtering rules. Script rules remain subject to Manifest V3 safety restrictions.</p>
+        <textarea id="userRulesEditor" rows="7" spellcheck="false" placeholder="example.org##.ad"></textarea>
+        <div class="button-row">
+          <button id="userRulesApply" type="button">Apply</button>
+          <button id="userRulesReset" type="button">Reset</button>
+          <button id="userRulesCopy" type="button">Copy</button>
+        </div>
+      </details>
+
+      <details class="dashboard-section">
+        <summary>Element blocker</summary>
+        <p class="helper">Use AdGuard Assistant to create a cosmetic blocking rule on the active page.</p>
+        <div class="button-row">
+          <button id="assistantOpen" type="button">Block element on this page</button>
+          <button id="assistantClose" type="button">Close Assistant</button>
+        </div>
+      </details>
+
+      <details class="dashboard-section">
+        <summary>Request log</summary>
+        <div class="option-row borderless">
+          <label for="requestLogScope">Show</label>
+          <select id="requestLogScope">
+            <option value="current">Current tab</option>
+            <option value="all">All tabs</option>
+          </select>
+        </div>
+        <div id="requestLog" class="request-log" aria-label="Blocked requests"></div>
+        <div class="button-row">
+          <button id="requestLogClear" type="button">Clear log</button>
+        </div>
+      </details>
+
+      <details class="dashboard-section">
+        <summary>Advanced and diagnostics</summary>
+        <div class="button-row">
+          <button id="adguardStart" type="button">Start engine</button>
+          <button id="adguardStop" type="button">Stop engine</button>
+          <button id="copyDiagnostics" type="button">Copy diagnostics</button>
+        </div>
+        <pre id="adguardDiagnostics" class="diagnostics">Loading diagnostics...</pre>
+        <p class="helper dns-note">DNS-level protection requires a separate AdGuard DNS, AdGuard Home, or native network product. This browser extension does not fake DNS controls.</p>
+      </details>
+
+      <div id="adguardStatus" class="status-region" role="status" aria-live="polite"></div>
     </section>
 
     <footer>
-      <button id="reset" type="button">Reset defaults</button>
       <div class="credits">
+        <span>Segment data:</span>
         <a href="https://sponsor.ajay.app/" target="_blank" rel="noreferrer">SponsorBlock</a>
-        <span>+</span>
+        <span>· Filtering:</span>
         <a href="https://github.com/AdguardTeam" target="_blank" rel="noreferrer">AdGuard</a>
       </div>
     </footer>
   </main>
 
   <script src="lib/settings.js"></script>
+  <script src="lib/adguard-utils.js"></script>
+  <script src="lib/adguard-filters.js"></script>
   <script src="popup.js"></script>
+  <script src="popup-youtube.js"></script>
+  <script src="popup-adguard.js"></script>
 </body>
 </html>

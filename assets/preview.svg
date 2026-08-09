@@ -1,60 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 690">
   <rect width="1120" height="690" rx="30" fill="#17171a"/>
-  <text x="56" y="66" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24" font-weight="750">Dark + light. Same controls.</text>
+  <text x="56" y="66" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24" font-weight="750">Two tabs. One browser cleanup extension.</text>
 
   <g transform="translate(70 104)">
     <rect width="430" height="520" rx="20" fill="#0b0b0c" stroke="#2b2b30" stroke-width="2"/>
-    <rect x="25" y="26" width="44" height="44" rx="11" fill="#111114"/>
-    <path d="M37 36V59L54 47.5Z" fill="#fff"/>
-    <path d="M55 39 63 47 55 55" fill="none" stroke="#ff0033" stroke-width="4" stroke-linecap="round"/>
-    <text x="84" y="42" fill="#ff0033" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8" font-weight="800" letter-spacing="1.6">YOUTUBE CLEANUP</text>
-    <text x="84" y="61" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="800">YT Autoskipper</text>
-    <rect x="355" y="34" width="48" height="27" rx="14" fill="#ff0033"/>
-    <circle cx="390" cy="47.5" r="9" fill="#fff"/>
-    <path d="M25 90H405" stroke="#29292e"/>
-    <text x="25" y="124" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="800" letter-spacing="1">PROTECTION</text>
-    <text x="354" y="124" fill="#8f8f98" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="0.6">GLOBAL</text>
-    <text x="25" y="159" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" font-weight="700">Ad Block</text>
-    <text x="25" y="177" fill="#8f8f98" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9">AdGuard Base filter, global by default</text>
-    <rect x="360" y="151" width="42" height="23" rx="12" fill="#ff0033"/>
-    <circle cx="391" cy="162.5" r="7" fill="#fff"/>
-    <path d="M25 198H405M25 244H405" stroke="#29292e"/>
-    <text x="25" y="227" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Theme</text>
-    <rect x="312" y="208" width="90" height="27" rx="6" fill="#18181b" stroke="#333338"/>
-    <text x="326" y="226" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10">System</text>
-    <text x="25" y="286" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="800" letter-spacing="1">SEGMENT BEHAVIOR</text>
+    <text x="28" y="42" fill="#ff0033" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8" font-weight="800" letter-spacing="1.5">BROWSER CLEANUP</text>
+    <text x="28" y="65" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="800">YT Autoskipper</text>
+    <rect x="25" y="88" width="380" height="42" rx="9" fill="#111114" stroke="#29292e"/>
+    <rect x="30" y="93" width="182" height="32" rx="7" fill="#1c1c20"/>
+    <path d="M30 124H212" stroke="#ff0033" stroke-width="2"/>
+    <text x="68" y="114" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="800">YouTube Segments</text>
+    <text x="278" y="114" fill="#8f8f98" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="800">AdGuard</text>
+    <text x="25" y="162" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="800" letter-spacing="1">YOUTUBE SEGMENTS</text>
+    <text x="335" y="162" fill="#8f8f98" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8">YouTube only</text>
+    <text x="25" y="201" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" font-weight="700">Segment skipping</text>
+    <rect x="360" y="187" width="42" height="23" rx="12" fill="#ff0033"/>
+    <circle cx="391" cy="198.5" r="7" fill="#fff"/>
+    <path d="M25 225H405" stroke="#29292e"/>
     <g fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11">
-      <text x="44" y="326">Sponsor</text><text x="44" y="368">Self promotion</text><text x="44" y="410">Intro</text><text x="44" y="452">Non music</text>
+      <text x="44" y="270">Sponsor</text><text x="44" y="312">Self promotion</text><text x="44" y="354">Intro</text><text x="44" y="396">Non music</text>
     </g>
-    <circle cx="29" cy="322" r="5" fill="#00d400"/><circle cx="29" cy="364" r="5" fill="#ffff00"/><circle cx="29" cy="406" r="5" fill="#00ffff"/><circle cx="29" cy="448" r="5" fill="#ff9900"/>
-    <g fill="#18181b" stroke="#333338"><rect x="302" y="308" width="100" height="27" rx="6"/><rect x="302" y="350" width="100" height="27" rx="6"/><rect x="302" y="392" width="100" height="27" rx="6"/><rect x="302" y="434" width="100" height="27" rx="6"/></g>
-    <g fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9"><text x="318" y="326">Auto skip</text><text x="318" y="368">Auto skip</text><text x="318" y="410">Show button</text><text x="318" y="452">Show button</text></g>
+    <circle cx="29" cy="266" r="5" fill="#00d400"/><circle cx="29" cy="308" r="5" fill="#ffff00"/><circle cx="29" cy="350" r="5" fill="#00ffff"/><circle cx="29" cy="392" r="5" fill="#ff9900"/>
+    <g fill="#18181b" stroke="#333338"><rect x="302" y="252" width="100" height="27" rx="6"/><rect x="302" y="294" width="100" height="27" rx="6"/><rect x="302" y="336" width="100" height="27" rx="6"/><rect x="302" y="378" width="100" height="27" rx="6"/></g>
+    <g fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9"><text x="318" y="270">Auto skip</text><text x="318" y="312">Auto skip</text><text x="318" y="354">Show button</text><text x="318" y="396">Show button</text></g>
+    <text x="25" y="455" fill="#8f8f98" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10">Markers · notices · per-category behavior</text>
   </g>
 
   <g transform="translate(620 104)">
     <rect width="430" height="520" rx="20" fill="#fff" stroke="#dedee2" stroke-width="2"/>
-    <rect x="25" y="26" width="44" height="44" rx="11" fill="#f2f2f4"/>
-    <path d="M37 36V59L54 47.5Z" fill="#111114"/>
-    <path d="M55 39 63 47 55 55" fill="none" stroke="#ff0033" stroke-width="4" stroke-linecap="round"/>
-    <text x="84" y="42" fill="#ff0033" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8" font-weight="800" letter-spacing="1.6">YOUTUBE CLEANUP</text>
-    <text x="84" y="61" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="800">YT Autoskipper</text>
-    <rect x="355" y="34" width="48" height="27" rx="14" fill="#ff0033"/>
-    <circle cx="390" cy="47.5" r="9" fill="#fff"/>
-    <path d="M25 90H405" stroke="#dedee2"/>
-    <text x="25" y="124" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="800" letter-spacing="1">PROTECTION</text>
-    <text x="354" y="124" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="0.6">GLOBAL</text>
-    <text x="25" y="159" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" font-weight="700">Ad Block</text>
-    <text x="25" y="177" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9">AdGuard Base filter, global by default</text>
-    <rect x="360" y="151" width="42" height="23" rx="12" fill="#ff0033"/>
-    <circle cx="391" cy="162.5" r="7" fill="#fff"/>
-    <path d="M25 198H405M25 244H405" stroke="#dedee2"/>
-    <text x="25" y="227" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12">Theme</text>
-    <rect x="312" y="208" width="90" height="27" rx="6" fill="#fff" stroke="#d8d8dc"/>
-    <text x="326" y="226" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10">Light</text>
-    <text x="25" y="286" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="800" letter-spacing="1">SEGMENT BEHAVIOR</text>
-    <g fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11"><text x="44" y="326">Sponsor</text><text x="44" y="368">Self promotion</text><text x="44" y="410">Intro</text><text x="44" y="452">Non music</text></g>
-    <circle cx="29" cy="322" r="5" fill="#00a900"/><circle cx="29" cy="364" r="5" fill="#d1b600"/><circle cx="29" cy="406" r="5" fill="#00a5a5"/><circle cx="29" cy="448" r="5" fill="#e17f00"/>
-    <g fill="#fff" stroke="#d8d8dc"><rect x="302" y="308" width="100" height="27" rx="6"/><rect x="302" y="350" width="100" height="27" rx="6"/><rect x="302" y="392" width="100" height="27" rx="6"/><rect x="302" y="434" width="100" height="27" rx="6"/></g>
-    <g fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9"><text x="318" y="326">Auto skip</text><text x="318" y="368">Auto skip</text><text x="318" y="410">Show button</text><text x="318" y="452">Show button</text></g>
+    <text x="28" y="42" fill="#ff0033" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8" font-weight="800" letter-spacing="1.5">BROWSER CLEANUP</text>
+    <text x="28" y="65" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="800">YT Autoskipper</text>
+    <rect x="25" y="88" width="380" height="42" rx="9" fill="#f7f7f8" stroke="#dedee2"/>
+    <text x="66" y="114" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="800">YouTube Segments</text>
+    <rect x="216" y="93" width="184" height="32" rx="7" fill="#eeeef0"/>
+    <path d="M216 124H400" stroke="#ff0033" stroke-width="2"/>
+    <text x="283" y="114" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="800">AdGuard</text>
+    <text x="25" y="162" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="800" letter-spacing="1">PROTECTION</text>
+    <text x="321" y="162" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8">Engine running</text>
+    <text x="25" y="201" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" font-weight="700">AdGuard protection</text>
+    <rect x="360" y="187" width="42" height="23" rx="12" fill="#ff0033"/>
+    <circle cx="391" cy="198.5" r="7" fill="#fff"/>
+    <path d="M25 225H405" stroke="#dedee2"/>
+    <text x="25" y="258" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700">Filters</text>
+    <rect x="25" y="274" width="112" height="58" rx="8" fill="#f7f7f8" stroke="#dedee2"/>
+    <rect x="147" y="274" width="112" height="58" rx="8" fill="#f7f7f8" stroke="#dedee2"/>
+    <rect x="269" y="274" width="136" height="58" rx="8" fill="#f7f7f8" stroke="#dedee2"/>
+    <text x="38" y="297" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" font-weight="800">3</text>
+    <text x="38" y="316" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8">Enabled filters</text>
+    <text x="160" y="297" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" font-weight="800">42k</text>
+    <text x="160" y="316" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8">Loaded rules</text>
+    <text x="282" y="297" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" font-weight="800">3 / 50</text>
+    <text x="282" y="316" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8">Ruleset quota</text>
+    <g fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="11" font-weight="700">
+      <text x="25" y="372">Allowlist</text><text x="25" y="410">User rules</text><text x="25" y="448">Request log</text>
+    </g>
+    <g fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9">
+      <text x="292" y="372">2 domains</text><text x="292" y="410">4 custom rules</text><text x="292" y="448">18 blocked</text>
+    </g>
+    <text x="25" y="486" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9">Assistant · diagnostics · document blocking</text>
   </g>
 </svg>

@@ -42,3 +42,7 @@ jobs:
           test -f dist/extension/manifest.json
           test -f dist/extension/background.js
           test -f dist/extension/adguard-content.js
+          test -f dist/extension/adguard-assistant.js
+          test -f dist/extension/blocking-page.html
+          test -f dist/extension/filters/catalog.json
+          node -e "const m=require('./dist/extension/manifest.json'); const r=m.declarative_net_request?.rule_resources||[]; if(r.length < 2 || r.length > 100) process.exit(1)"

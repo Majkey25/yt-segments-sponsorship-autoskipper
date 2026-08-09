@@ -15,7 +15,14 @@ on:
       - popup.html
       - popup.css
       - popup.js
+      - popup-youtube.js
+      - popup-adguard.js
+      - blocking-page.html
+      - blocking-page.css
+      - blocking-page.js
       - icons/**
+      - assets/**
+      - README.md
       - RELEASE_NOTES.md
       - .github/workflows/release.yml
   schedule:
@@ -55,6 +62,11 @@ jobs:
         shell: bash
         run: |
           unzip -Z1 dist/release/yt-segments-sponsorship-autoskipper.zip | grep -Fx "manifest.json"
+          test -f dist/extension/background.js
+          test -f dist/extension/adguard-content.js
+          test -f dist/extension/adguard-assistant.js
+          test -f dist/extension/blocking-page.html
+          test -f dist/extension/filters/catalog.json
 
       - name: Read extension version
         id: version
