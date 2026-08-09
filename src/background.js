@@ -22,7 +22,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
 
   const settings = SegmentSettings.sanitizeSettings(changes.settings.newValue);
-  void updateAdguard(settings.adBlockEnabled);
+  void updateAdguard(settings.adBlockEnabled, settings.adBlockScope);
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -52,18 +52,20 @@ async function initializeAdguard() {
 
   adguardApi = await AdguardApi.create({ localScriptRulesJs });
   adguardMessageHandler = adguardApi.getMessageHandler();
-  await adguardApi.start(AdblockConfig.createAdguardConfiguration(settings.adBlockEnabled));
+  await adguardApi.start(
+    AdblockConfig.createAdguardConfiguration(settings.adBlockEnabled, settings.adBlockScope)
+  );
   return adguardApi;
 }
 
-async function updateAdguard(enabled) {
+async function updateAdguard(enabled, scope) {
   await adguardReady;
   if (!adguardApi) {
     return;
   }
 
   try {
-    await adguardApi.configure(AdblockConfig.createAdguardConfiguration(enabled));
+    await adguardApi.configure(AdblockConfig.createAdguardConfiguration(enabled, scope));
   } catch (error) {
     console.error('[YT Autoskipper] Failed to update ad blocking', error);
   }
