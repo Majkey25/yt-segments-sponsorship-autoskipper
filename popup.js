@@ -1,5 +1,8 @@
 const enabledInput = document.getElementById('enabled');
 const adBlockInput = document.getElementById('adBlockEnabled');
+const adBlockScopeInput = document.getElementById('adBlockScope');
+const adBlockScopeStatus = document.getElementById('adBlockScopeStatus');
+const adBlockScopeCopy = document.getElementById('adBlockScopeCopy');
 const markersInput = document.getElementById('showMarkers');
 const toastInput = document.getElementById('showToast');
 const themeInput = document.getElementById('theme');
@@ -18,6 +21,7 @@ async function init() {
 
   enabledInput.addEventListener('change', saveFromControls);
   adBlockInput.addEventListener('change', saveFromControls);
+  adBlockScopeInput.addEventListener('change', saveFromControls);
   markersInput.addEventListener('change', saveFromControls);
   toastInput.addEventListener('change', saveFromControls);
   themeInput.addEventListener('change', saveFromControls);
@@ -32,10 +36,12 @@ async function init() {
 function render() {
   enabledInput.checked = settings.enabled;
   adBlockInput.checked = settings.adBlockEnabled;
+  adBlockScopeInput.value = settings.adBlockScope;
   markersInput.checked = settings.showMarkers;
   toastInput.checked = settings.showToast;
   themeInput.value = settings.theme;
   applyTheme(settings.theme);
+  renderAdBlockScope();
   categoriesContainer.replaceChildren();
 
   for (const [name, definition] of Object.entries(SegmentSettings.CATEGORY_DEFINITIONS)) {
@@ -86,6 +92,7 @@ async function saveFromControls() {
   settings = SegmentSettings.sanitizeSettings({
     enabled: enabledInput.checked,
     adBlockEnabled: adBlockInput.checked,
+    adBlockScope: adBlockScopeInput.value,
     showMarkers: markersInput.checked,
     showToast: toastInput.checked,
     theme: themeInput.value,
@@ -93,6 +100,7 @@ async function saveFromControls() {
   });
 
   applyTheme(settings.theme);
+  renderAdBlockScope();
   await chrome.storage.sync.set({ settings });
 }
 
@@ -100,6 +108,14 @@ async function resetDefaults() {
   settings = SegmentSettings.sanitizeSettings(SegmentSettings.DEFAULT_SETTINGS);
   await chrome.storage.sync.set({ settings });
   render();
+}
+
+function renderAdBlockScope() {
+  const globalScope = settings.adBlockScope === 'global';
+  adBlockScopeStatus.textContent = globalScope ? 'Global' : 'YouTube only';
+  adBlockScopeCopy.textContent = globalScope
+    ? 'Blocks ads across all websites using AdGuard filters'
+    : 'AdGuard filtering is restricted to YouTube';
 }
 
 function applyTheme(theme) {
