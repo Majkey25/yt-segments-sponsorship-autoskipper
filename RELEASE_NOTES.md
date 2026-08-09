@@ -1,16 +1,15 @@
-# YT Segments & Sponsor Autoskipper v1.0.0
+# YT Segments & Sponsor Autoskipper v1.0.1
 
-Initial public release.
+Global ad-block scope update.
 
-## Features
+## Changes
 
-- Automatic SponsorBlock skipping with per-category controls.
-- Manual skip buttons for categories you do not want auto-skipped.
-- Colored SponsorBlock markers on the YouTube timeline.
-- YouTube-only ad blocking powered by AdGuard Base MV3 rules.
-- Dark, light, and system popup themes.
-- Automatic GitHub Actions refresh of bundled AdGuard filter assets.
-- Chrome and Chromium support through Manifest V3.
+- Ad Block now defaults to global filtering across websites.
+- Advanced settings can restrict AdGuard filtering to YouTube only.
+- SponsorBlock remains YouTube specific.
+- Existing missing or invalid scope settings safely fall back to Global.
+- The AdGuard content runtime now loads globally while SponsorBlock scripts remain limited to YouTube.
+- Package and manifest versions are aligned at `1.0.1`.
 
 ## Installation
 
@@ -19,6 +18,6 @@ Initial public release.
 3. Open `chrome://extensions`.
 4. Enable Developer mode.
 5. Click Load unpacked.
-6. Select the extracted folder that directly contains `manifest.json`.
+6. Select the extracted folder that directly contains `manifest.json` and `adguard-content.js`.
 
-Filter assets in this release may be refreshed automatically without changing the extension code version.
+Use the release asset ZIP, not GitHub's automatically generated source archive.
