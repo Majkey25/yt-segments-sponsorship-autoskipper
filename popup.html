@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YT Segments & Sponsor Autoskipper</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="panel">
+    <header class="hero">
+      <div class="brand">
+        <img src="icons/icon-48.png" width="42" height="42" alt="">
+        <div>
+          <div class="eyebrow">YOUTUBE CLEANUP</div>
+          <h1>YT Autoskipper</h1>
+          <p>Sponsors, filler and ads. Gone.</p>
+        </div>
+      </div>
+      <label class="switch" title="Enable or disable SponsorBlock segment skipping">
+        <input id="enabled" type="checkbox" aria-label="Enable segment skipping">
+        <span></span>
+      </label>
+    </header>
+
+    <section class="protection" aria-labelledby="protection-title">
+      <div class="section-heading">
+        <span id="protection-title">Protection</span>
+        <span class="section-note">YouTube only</span>
+      </div>
+
+      <label class="feature-row">
+        <span class="feature-copy">
+          <strong>Ad Block</strong>
+          <small>AdGuard Base filter, scoped to YouTube</small>
+        </span>
+        <span class="switch switch-small">
+          <input id="adBlockEnabled" type="checkbox">
+          <span></span>
+        </span>
+      </label>
+
+      <div class="option-row">
+        <label for="theme">Theme</label>
+        <select id="theme" aria-label="Popup theme">
+          <option value="system">System</option>
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+        </select>
+      </div>
+
+      <div class="inline-options">
+        <label><input id="showMarkers" type="checkbox"> Timeline markers</label>
+        <label><input id="showToast" type="checkbox"> Skip notices</label>
+      </div>
+    </section>
+
+    <section class="segments" aria-labelledby="segments-title">
+      <div class="section-heading">
+        <span id="segments-title">Segment behavior</span>
+        <span class="section-note">SponsorBlock</span>
+      </div>
+      <div id="categories" class="categories"></div>
+    </section>
+
+    <footer>
+      <button id="reset" type="button">Reset defaults</button>
+      <div class="credits">
+        <a href="https://sponsor.ajay.app/" target="_blank" rel="noreferrer">SponsorBlock</a>
+        <span>+</span>
+        <a href="https://github.com/AdguardTeam" target="_blank" rel="noreferrer">AdGuard</a>
+      </div>
+    </footer>
+  </main>
+
+  <script src="lib/settings.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

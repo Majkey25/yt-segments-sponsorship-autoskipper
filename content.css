@@ -1,0 +1,75 @@
+.majkey-segment-skip-button {
+  --segment-color: #ffffff;
+  position: absolute;
+  right: 24px;
+  bottom: 82px;
+  z-index: 70;
+  min-width: 150px;
+  padding: 12px 18px;
+  border: 2px solid var(--segment-color);
+  border-radius: 4px;
+  background: rgba(15, 15, 15, 0.92);
+  color: #fff;
+  font: 600 15px/1.2 Roboto, Arial, sans-serif;
+  letter-spacing: 0.2px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+.majkey-segment-skip-button:hover {
+  background: rgba(35, 35, 35, 0.96);
+}
+
+.majkey-segment-skip-button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+.majkey-segment-skip-button[hidden] {
+  display: none !important;
+}
+
+.majkey-segment-toast {
+  position: absolute;
+  left: 20px;
+  bottom: 82px;
+  z-index: 70;
+  max-width: min(440px, 70%);
+  padding: 9px 12px;
+  border-radius: 6px;
+  background: rgba(15, 15, 15, 0.9);
+  color: #fff;
+  font: 500 13px/1.25 Roboto, Arial, sans-serif;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 160ms ease, transform 160ms ease;
+  pointer-events: none;
+}
+
+.majkey-segment-toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.majkey-segment-marker-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.majkey-segment-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  opacity: 0.78;
+  pointer-events: none;
+}
+
+.ytp-fullscreen .majkey-segment-skip-button,
+.ytp-fullscreen .majkey-segment-toast {
+  bottom: 96px;
+}
