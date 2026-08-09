@@ -1,37 +1,38 @@
-# YT Segments & Sponsor Autoskipper v1.1.0
+# YT Segments & Sponsor Autoskipper v1.2.0
 
-Two-tab control center update.
+AdGuard preset and player control update.
 
-## Highlights
+## AdGuard presets
 
-- The popup now has exactly two top-level sections: **YouTube Segments** and **AdGuard**.
-- SponsorBlock is no longer used as the primary feature label in the popup. Attribution remains in credits and project notices.
-- Existing v1.0.1 settings migrate automatically into the new nested YouTube and AdGuard settings model.
-
-## AdGuard dashboard
-
-- Global filtering remains the default, with **YouTube only** available as an alternate scope.
-- The build now discovers and packages the available Chromium MV3 AdGuard rulesets instead of declaring only the Base filter.
-- Filter selection UI shows enabled filter count, loaded rule count, and Chrome ruleset quota information.
-- Added editable allowlist with current-site protection controls.
-- Added custom user rules editor.
-- Added AdGuard Assistant element blocker with created-rule persistence.
-- Added bounded in-memory blocked request log with current-tab and all-tabs views.
-- Added engine start and stop controls plus sanitized diagnostics.
-- Added local document blocking page support for `$document` filtering rules.
-- Failed AdGuard reconfiguration keeps the last known good applied configuration.
+- Added **Minimal**, **Recommended**, and **Strict** filter presets.
+- **Recommended** is the default for new configurations and settings restored to defaults, using filter IDs `2, 3, 17, 105` for AdGuard Base, Tracking Protection, URL Tracking, and Czech/Slovak coverage.
+- **Minimal** uses filter ID `2` for the smallest core ad blocking ruleset footprint.
+- **Strict** uses filter IDs `2, 3, 17, 18, 19, 20, 21, 22, 105` and adds cookie notices, popups, mobile app banners, other annoyances, and widgets.
+- **Custom** is detected automatically when manually selected filter IDs do not exactly match a named preset.
+- Existing saved filter selections are preserved during update and are not silently replaced by the new Recommended default.
+- Presets are validated against the packaged filter catalog before application.
 
 ## YouTube Segments
 
-- Existing automatic and manual segment behavior remains available.
-- Timeline markers, skip notices, per-category modes, and safe defaults are preserved.
-- Segment fetching remains YouTube-specific.
+- Redesigned the manual segment **skip button** with a native-like YouTube player appearance.
+- The button now uses neutral player styling and an inline skip icon instead of a category-colored border.
+- Existing skip behavior, automatic skipping, segment categories, timeline markers, and skip notices remain unchanged.
+
+## Distribution
+
+- The existing **GitHub Release ZIP** remains fully supported as the fallback installation and update path.
+- Both stable and versioned release archives continue to be produced by the release workflow.
+- Chrome Web Store distribution is not part of this release and does not replace the existing fallback.
+
+## Existing AdGuard controls
+
+Global filtering, YouTube-only scope, current-site protection, the allowlist, custom user rules, AdGuard Assistant, request log, diagnostics, and document blocking remain available from the AdGuard tab.
 
 ## DNS
 
 DNS-level features such as AdGuard DNS, AdGuard Home, DNS-over-HTTPS, DNS-over-TLS, and DNSCrypt are not exposed because they are not browser controls provided by `@adguard/api-mv3`.
 
-## Installation
+## Fallback installation
 
 1. Download `yt-segments-sponsorship-autoskipper.zip` from this release.
 2. Extract the archive to a permanent folder.
