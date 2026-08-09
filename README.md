@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  Skip sponsored video segments and other interruptions, then block YouTube ads with a focused Manifest V3 ad-blocking engine.
+  Skip sponsored YouTube segments with SponsorBlock and block ads globally with AdGuard MV3 filtering.
 </p>
 
 ## Download
@@ -37,16 +37,17 @@ Chrome cannot install an unsigned ZIP directly. Extract it first, then load the 
 6. Click **Load unpacked**.
 7. Select the extracted folder that directly contains `manifest.json` and `adguard-content.js`.
 8. Pin **YT Segments & Sponsor Autoskipper** from the Extensions menu.
-9. Refresh any open YouTube tabs.
+9. Refresh any open tabs.
 
 ## Features
 
-- Auto-skip SponsorBlock sponsor segments.
-- Per-category behavior: **Auto skip**, **Show button**, or **Ignore**.
+- Auto-skip SponsorBlock sponsor segments on YouTube.
+- Per-category SponsorBlock behavior: **Auto skip**, **Show button**, or **Ignore**.
 - Supports sponsor, self-promotion, interaction, intro, outro, preview, hook, non-music, and filler segments.
 - Colored segment markers on the YouTube seek bar.
 - YouTube-style manual skip button for categories you do not want skipped automatically.
-- YouTube-only ad blocking using the AdGuard Base filter and AdGuard MV3 engine.
+- **Global ad blocking by default** using the AdGuard Base filter and AdGuard MV3 engine.
+- Advanced ad-block scope setting for **Global** or **YouTube only** filtering.
 - Dark, light, and system popup themes.
 - No analytics, telemetry, accounts, advertisements, or remote executable code.
 - Automated release builds refresh the bundled AdGuard rules from the upstream package.
@@ -73,11 +74,13 @@ Filler is intentionally ignored by default because it is an aggressive category 
 
 ## How ad blocking works
 
-The extension does not contain a home-made list of YouTube ad URLs. At build time it uses the official AdGuard MV3 tooling and **AdGuard Base filter**. The filtering engine is configured with a YouTube-only blocklist, so the ad blocker is not intended to modify unrelated websites.
+At build time the extension uses the official AdGuard MV3 tooling and **AdGuard Base filter**. Ad Block is **Global by default**, so AdGuard filtering applies across websites covered by the extension permissions.
+
+Open **Advanced settings** in the popup and change **Ad blocking scope** to **YouTube only** if you want AdGuard restricted to YouTube, YouTube Music, mobile YouTube, and embedded YouTube pages. This setting does not change SponsorBlock. SponsorBlock remains YouTube-specific.
 
 Manifest V3 does not allow an extension to silently download and execute new filtering code. To keep the packaged rules fresh, GitHub Actions rebuilds the release with the newest `@adguard/dnr-rulesets` assets on a schedule.
 
-There is no honest way to promise that an ad blocker will work forever. YouTube and browser extension APIs change. The automated upstream refresh is designed to reduce maintenance lag, not pretend maintenance is unnecessary.
+There is no honest way to promise that an ad blocker will work forever. Websites, filter rules, and browser extension APIs change. The automated upstream refresh is designed to reduce maintenance lag, not pretend maintenance is unnecessary.
 
 ### Updating an unpacked install
 
@@ -98,7 +101,7 @@ SponsorBlock requests use the privacy-preserving hash-prefix endpoint. The exact
 
 | Permission | Why it is required |
 | --- | --- |
-| `storage` | Saves segment, ad-block, and theme settings. |
+| `storage` | Saves segment, ad-block scope, ad-block state, and theme settings. |
 | `tabs` | Supports the AdGuard MV3 filtering runtime. |
 | `webRequest` | Supports cosmetic filtering and request-aware AdGuard behavior. |
 | `webNavigation` | Lets the filtering engine apply scriptlets at the correct navigation stage. |
@@ -106,9 +109,9 @@ SponsorBlock requests use the privacy-preserving hash-prefix endpoint. The exact
 | `scripting` | Supports MV3 content filtering. |
 | `declarativeNetRequest` | Applies packaged network filtering rules. |
 | `declarativeNetRequestFeedback` | Lets the AdGuard runtime inspect declarative rule results while developing/unpacked. |
-| `<all_urls>` host access | Required by Chromium network filtering for cross-origin ad requests. The engine itself is configured to operate only on YouTube domains. |
+| `<all_urls>` host access | Required for the default global AdGuard filtering scope and cross-origin ad requests. |
 
-The broad host permission is the ugly part. Hiding that would be dishonest. Ad blocking can involve requests to many third-party hosts even when the page itself is YouTube.
+Global ad blocking requires broad host access. If you prefer narrower runtime behavior, switch the Advanced ad-block scope to **YouTube only**.
 
 ## Development
 
@@ -138,15 +141,16 @@ The Node test suite covers:
 
 - YouTube video ID extraction.
 - SponsorBlock segment validation and sorting.
-- Settings validation.
+- Settings validation and Global scope fallback.
 - SponsorBlock privacy hash-prefix request generation.
 - Exact-video response filtering.
-- AdGuard YouTube-only configuration.
+- AdGuard Global and YouTube-only configuration.
+- Global AdGuard manifest scope while SponsorBlock remains YouTube-only.
 - Manifest and release project contracts.
 
 ## Releases and filter refresh
 
-GitHub Actions performs the same release pattern as `tab-copy-extension`:
+GitHub Actions performs the release flow automatically:
 
 - run tests,
 - build a fresh MV3 extension,

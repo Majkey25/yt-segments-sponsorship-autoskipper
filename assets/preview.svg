@@ -13,8 +13,9 @@
     <circle cx="390" cy="47.5" r="9" fill="#fff"/>
     <path d="M25 90H405" stroke="#29292e"/>
     <text x="25" y="124" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="800" letter-spacing="1">PROTECTION</text>
+    <text x="354" y="124" fill="#8f8f98" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="0.6">GLOBAL</text>
     <text x="25" y="159" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" font-weight="700">Ad Block</text>
-    <text x="25" y="177" fill="#8f8f98" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9">AdGuard Base filter, scoped to YouTube</text>
+    <text x="25" y="177" fill="#8f8f98" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9">AdGuard Base filter, global by default</text>
     <rect x="360" y="151" width="42" height="23" rx="12" fill="#ff0033"/>
     <circle cx="391" cy="162.5" r="7" fill="#fff"/>
     <path d="M25 198H405M25 244H405" stroke="#29292e"/>
@@ -41,8 +42,9 @@
     <circle cx="390" cy="47.5" r="9" fill="#fff"/>
     <path d="M25 90H405" stroke="#dedee2"/>
     <text x="25" y="124" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="10" font-weight="800" letter-spacing="1">PROTECTION</text>
+    <text x="354" y="124" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="0.6">GLOBAL</text>
     <text x="25" y="159" fill="#111114" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" font-weight="700">Ad Block</text>
-    <text x="25" y="177" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9">AdGuard Base filter, scoped to YouTube</text>
+    <text x="25" y="177" fill="#73737a" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9">AdGuard Base filter, global by default</text>
     <rect x="360" y="151" width="42" height="23" rx="12" fill="#ff0033"/>
     <circle cx="391" cy="162.5" r="7" fill="#fff"/>
     <path d="M25 198H405M25 244H405" stroke="#dedee2"/>

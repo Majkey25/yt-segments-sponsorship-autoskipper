@@ -222,6 +222,38 @@ h1 {
   gap: 7px;
 }
 
+.advanced {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.advanced summary {
+  padding: 12px 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.advanced summary:hover {
+  color: var(--text);
+}
+
+.advanced summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.advanced-row {
+  min-height: 42px;
+  border-top: 0;
+  padding-bottom: 4px;
+}
+
+#adBlockScope {
+  width: 122px;
+}
+
 input[type="checkbox"]:not(.switch input) {
   width: 14px;
   height: 14px;
