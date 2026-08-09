@@ -17,13 +17,13 @@ function assertProjectFile(relativePath) {
   assert.ok(fs.existsSync(path.join(root, relativePath)), `${relativePath} must exist`);
 }
 
-test('package and manifest versions are aligned at v1.1.0', () => {
+test('package and manifest versions are aligned at v1.2.0', () => {
   const packageJson = readJson('package.json');
   const manifest = readJson('manifest.json');
 
   assert.equal(packageJson.name, 'yt-segments-sponsorship-autoskipper');
-  assert.equal(packageJson.version, '1.1.0');
-  assert.equal(manifest.version, '1.1.0');
+  assert.equal(packageJson.version, '1.2.0');
+  assert.equal(manifest.version, '1.2.0');
   assert.equal(packageJson.license, 'GPL-3.0-only');
   assert.equal(packageJson.scripts.test, 'node --test tests/*.test.js');
   assert.equal(packageJson.scripts.build, 'node scripts/build.mjs');
@@ -211,7 +211,7 @@ test('blocking page and Assistant bundle are packaged safely', () => {
   assert.match(build, /blocking-page\.js/);
 });
 
-test('README and release notes describe the dashboard and DNS boundary', () => {
+test('README and release notes document v1.2.0 presets and fallback distribution', () => {
   const readme = readText('README.md');
   const releaseNotes = readText('RELEASE_NOTES.md');
 
@@ -222,7 +222,20 @@ test('README and release notes describe the dashboard and DNS boundary', () => {
   assert.match(readme, /request log/i);
   assert.match(readme, /DNS/i);
   assert.doesNotMatch(readme, /YouTube-only ad blocking/);
-  assert.match(releaseNotes, /v1\.1\.0/);
-  assert.match(releaseNotes, /Assistant/);
-  assert.match(releaseNotes, /filter/i);
+  assert.match(readme, /Minimal/);
+  assert.match(readme, /Recommended/);
+  assert.match(readme, /Strict/);
+  assert.match(readme, /Custom/);
+  assert.match(readme, /2, 3, 17, 105/);
+  assert.match(readme, /native-like/i);
+  assert.match(readme, /GitHub Release ZIP/i);
+
+  assert.match(releaseNotes, /v1\.2\.0/);
+  assert.match(releaseNotes, /Minimal/);
+  assert.match(releaseNotes, /Recommended/);
+  assert.match(releaseNotes, /Strict/);
+  assert.match(releaseNotes, /Custom/);
+  assert.match(releaseNotes, /2, 3, 17, 105/);
+  assert.match(releaseNotes, /skip button/i);
+  assert.match(releaseNotes, /GitHub Release ZIP/i);
 });
