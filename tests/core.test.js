@@ -49,6 +49,7 @@ test('sanitizeSettings keeps only known modes and categories', () => {
   const settings = Settings.sanitizeSettings({
     enabled: false,
     adBlockEnabled: false,
+    adBlockScope: 'youtube',
     theme: 'light',
     categories: {
       sponsor: 'button',
@@ -59,10 +60,24 @@ test('sanitizeSettings keeps only known modes and categories', () => {
 
   assert.equal(settings.enabled, false);
   assert.equal(settings.adBlockEnabled, false);
+  assert.equal(settings.adBlockScope, 'youtube');
   assert.equal(settings.theme, 'light');
   assert.equal(settings.categories.sponsor, 'button');
   assert.equal(settings.categories.intro, Settings.DEFAULT_SETTINGS.categories.intro);
   assert.equal(settings.categories.unknown, undefined);
+});
+
+test('sanitizeSettings defaults ad blocking scope to global', () => {
+  const settings = Settings.sanitizeSettings({});
+
+  assert.equal(settings.adBlockScope, 'global');
+  assert.equal(Settings.DEFAULT_SETTINGS.adBlockScope, 'global');
+  assert.deepEqual(Settings.AD_BLOCK_SCOPES, ['global', 'youtube']);
+});
+
+test('sanitizeSettings accepts YouTube scope and rejects unknown scope', () => {
+  assert.equal(Settings.sanitizeSettings({ adBlockScope: 'youtube' }).adBlockScope, 'youtube');
+  assert.equal(Settings.sanitizeSettings({ adBlockScope: 'everywhere' }).adBlockScope, 'global');
 });
 
 test('sanitizeSettings defaults ad blocking to enabled and invalid themes to system', () => {
@@ -116,21 +131,29 @@ test('pickVideoSegments returns only the exact matching video', () => {
   assert.deepEqual(result, [{ UUID: 'y' }]);
 });
 
-test('AdGuard configuration is scoped to YouTube and uses the base ad filter', () => {
-  const configuration = AdblockConfig.createAdguardConfiguration(true);
+test('AdGuard configuration is global by default', () => {
+  const configuration = AdblockConfig.createAdguardConfiguration(true, 'global');
 
   assert.deepEqual(configuration.filters, [2]);
   assert.equal(configuration.filteringEnabled, true);
   assert.equal(configuration.assetsPath, 'filters');
-  assert.ok(configuration.blocklist.includes('youtube.com'));
-  assert.ok(configuration.blocklist.includes('www.youtube.com'));
-  assert.ok(configuration.blocklist.includes('music.youtube.com'));
+  assert.equal(configuration.blocklist, undefined);
 });
 
-test('AdGuard configuration can disable filtering without changing its scope', () => {
-  const configuration = AdblockConfig.createAdguardConfiguration(false);
+test('AdGuard configuration can be restricted to YouTube', () => {
+  const configuration = AdblockConfig.createAdguardConfiguration(true, 'youtube');
 
-  assert.equal(configuration.filteringEnabled, false);
-  assert.deepEqual(configuration.filters, [2]);
   assert.deepEqual(configuration.blocklist, AdblockConfig.YOUTUBE_BLOCKLIST);
+});
+
+test('AdGuard disabled state preserves selected scope semantics', () => {
+  const globalConfiguration = AdblockConfig.createAdguardConfiguration(false, 'global');
+  const youtubeConfiguration = AdblockConfig.createAdguardConfiguration(false, 'youtube');
+
+  assert.equal(globalConfiguration.filteringEnabled, false);
+  assert.deepEqual(globalConfiguration.filters, [2]);
+  assert.equal(globalConfiguration.blocklist, undefined);
+  assert.equal(youtubeConfiguration.filteringEnabled, false);
+  assert.deepEqual(youtubeConfiguration.filters, [2]);
+  assert.deepEqual(youtubeConfiguration.blocklist, AdblockConfig.YOUTUBE_BLOCKLIST);
 });
