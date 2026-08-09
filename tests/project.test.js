@@ -13,6 +13,7 @@ test('package metadata defines the public project and build commands', () => {
   const packageJson = readJson('package.json');
 
   assert.equal(packageJson.name, 'yt-segments-sponsorship-autoskipper');
+  assert.equal(packageJson.version, '1.0.1');
   assert.equal(packageJson.license, 'GPL-3.0-only');
   assert.equal(packageJson.scripts.test, 'node --test tests/*.test.js');
   assert.equal(packageJson.scripts.build, 'node scripts/build.mjs');
@@ -24,6 +25,7 @@ test('manifest declares the AdGuard MV3 runtime and branded extension metadata',
 
   assert.equal(manifest.manifest_version, 3);
   assert.equal(manifest.name, 'YT Segments & Sponsor Autoskipper');
+  assert.equal(manifest.version, '1.0.1');
   assert.equal(manifest.minimum_chrome_version, '121');
   assert.ok(manifest.permissions.includes('declarativeNetRequest'));
   assert.ok(manifest.permissions.includes('storage'));
