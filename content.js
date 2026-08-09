@@ -5,6 +5,7 @@ const state = {
   segments: [],
   requestVersion: 0,
   skipButton: null,
+  skipButtonText: null,
   toast: null,
   markerLayer: null,
   markerHost: null,
@@ -182,6 +183,15 @@ function showSkipButton(segment) {
     state.skipButton = document.createElement('button');
     state.skipButton.type = 'button';
     state.skipButton.className = 'majkey-segment-skip-button';
+
+    state.skipButtonText = document.createElement('span');
+    state.skipButtonText.className = 'majkey-segment-skip-text';
+
+    const icon = document.createElement('span');
+    icon.className = 'majkey-segment-skip-icon';
+    icon.setAttribute('aria-hidden', 'true');
+
+    state.skipButton.append(state.skipButtonText, icon);
     state.skipButton.addEventListener('click', () => {
       const target = state.skipButton?.segment;
       if (target) {
@@ -191,10 +201,8 @@ function showSkipButton(segment) {
     player.appendChild(state.skipButton);
   }
 
-  const definition = SegmentSettings.CATEGORY_DEFINITIONS[segment.category];
   state.skipButton.segment = segment;
-  state.skipButton.style.setProperty('--segment-color', definition?.color || '#ffffff');
-  state.skipButton.textContent = `Skip ${labelForCategory(segment.category)}`;
+  state.skipButtonText.textContent = `Skip ${labelForCategory(segment.category)}`;
   state.skipButton.hidden = false;
 }
 
