@@ -33,22 +33,31 @@ test('manifest declares the AdGuard MV3 runtime and branded extension metadata',
   assert.equal(manifest.icons['128'], 'icons/icon-128.png');
 });
 
-test('manifest runs AdGuard before page load and segment UI after page load', () => {
+test('manifest runs AdGuard globally before page load and SponsorBlock only on YouTube', () => {
   const manifest = readJson('manifest.json');
   const adguardScript = manifest.content_scripts.find((entry) => entry.js.includes('adguard-content.js'));
   const segmentScript = manifest.content_scripts.find((entry) => entry.js.includes('content.js'));
 
   assert.equal(adguardScript.run_at, 'document_start');
   assert.equal(adguardScript.all_frames, true);
+  assert.deepEqual(adguardScript.matches, ['<all_urls>']);
   assert.equal(segmentScript.run_at, 'document_idle');
+  assert.ok(!segmentScript.matches.includes('<all_urls>'));
+  assert.ok(segmentScript.matches.every((pattern) => pattern.includes('youtube.com')));
 });
 
-test('popup exposes ad blocking and theme controls', () => {
+test('popup exposes global ad blocking and advanced scope controls', () => {
   const html = fs.readFileSync(path.join(root, 'popup.html'), 'utf8');
   const script = fs.readFileSync(path.join(root, 'popup.js'), 'utf8');
 
   assert.match(html, /id="adBlockEnabled"/);
+  assert.match(html, /id="adBlockScopeStatus"/);
+  assert.match(html, /id="advancedToggle"/);
+  assert.match(html, /id="adBlockScope"/);
+  assert.match(html, /value="global"/);
+  assert.match(html, /value="youtube"/);
   assert.match(html, /id="theme"/);
   assert.match(script, /adBlockEnabled/);
+  assert.match(script, /settings\.adBlockScope/);
   assert.match(script, /settings\.theme/);
 });
