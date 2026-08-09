@@ -26,13 +26,13 @@
     <section class="protection" aria-labelledby="protection-title">
       <div class="section-heading">
         <span id="protection-title">Protection</span>
-        <span class="section-note">YouTube only</span>
+        <span id="adBlockScopeStatus" class="section-note">Global</span>
       </div>
 
       <label class="feature-row">
         <span class="feature-copy">
           <strong>Ad Block</strong>
-          <small>AdGuard Base filter, scoped to YouTube</small>
+          <small id="adBlockScopeCopy">Blocks ads across all websites using AdGuard filters</small>
         </span>
         <span class="switch switch-small">
           <input id="adBlockEnabled" type="checkbox">
@@ -53,6 +53,17 @@
         <label><input id="showMarkers" type="checkbox"> Timeline markers</label>
         <label><input id="showToast" type="checkbox"> Skip notices</label>
       </div>
+
+      <details class="advanced" id="advancedSettings">
+        <summary id="advancedToggle">Advanced settings</summary>
+        <div class="option-row advanced-row">
+          <label for="adBlockScope">Ad blocking scope</label>
+          <select id="adBlockScope" aria-label="Ad blocking scope">
+            <option value="global">Global</option>
+            <option value="youtube">YouTube only</option>
+          </select>
+        </div>
+      </details>
     </section>
 
     <section class="segments" aria-labelledby="segments-title">
