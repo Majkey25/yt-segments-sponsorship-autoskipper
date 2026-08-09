@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "YT Segments & Sponsor Autoskipper",
   "short_name": "YT Autoskipper",
-  "version": "1.0.1",
-  "description": "Skip SponsorBlock segments on YouTube and block ads globally with AdGuard MV3 rules.",
+  "version": "1.1.0",
+  "description": "Skip YouTube segments and manage global AdGuard MV3 protection from one extension.",
   "minimum_chrome_version": "121",
   "permissions": [
     "storage",
