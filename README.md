@@ -23,18 +23,21 @@
 
 **[Download the latest extension ZIP](https://github.com/Majkey25/yt-segments-sponsorship-autoskipper/releases/latest/download/yt-segments-sponsorship-autoskipper.zip)**
 
+> **Important:** use the ZIP from **Releases → Assets**. Do not use GitHub's automatically generated **Source code** ZIP and do not load the repository source folder directly in Chrome. The AdGuard runtime, filter rules, and files such as `adguard-content.js` are generated during the release build and exist only in the built extension.
+
 Chrome cannot install an unsigned ZIP directly. Extract it first, then load the extracted folder through Developer mode.
 
 ## Install in Chrome
 
-1. Download `yt-segments-sponsorship-autoskipper.zip` from the latest release.
-2. Extract it to a permanent folder.
-3. Open `chrome://extensions`.
-4. Enable **Developer mode**.
-5. Click **Load unpacked**.
-6. Select the extracted folder that directly contains `manifest.json`.
-7. Pin **YT Segments & Sponsor Autoskipper** from the Extensions menu.
-8. Refresh any open YouTube tabs.
+1. Open the latest GitHub release.
+2. Under **Assets**, download `yt-segments-sponsorship-autoskipper.zip`.
+3. Extract it to a permanent folder.
+4. Open `chrome://extensions`.
+5. Enable **Developer mode**.
+6. Click **Load unpacked**.
+7. Select the extracted folder that directly contains `manifest.json` and `adguard-content.js`.
+8. Pin **YT Segments & Sponsor Autoskipper** from the Extensions menu.
+9. Refresh any open YouTube tabs.
 
 ## Features
 
