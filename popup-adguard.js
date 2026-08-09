@@ -3,6 +3,8 @@ const adguardScopeInput = document.getElementById('adguardScope');
 const currentSiteProtectionInput = document.getElementById('currentSiteProtection');
 const currentSiteLabel = document.getElementById('currentSiteLabel');
 const engineStateLabel = document.getElementById('adguardEngineState');
+const filterPreset = document.getElementById('filterPreset');
+const filterPresetHelp = document.getElementById('filterPresetHelp');
 const filterSearchInput = document.getElementById('filterSearch');
 const filterList = document.getElementById('filterList');
 const enabledFilterCount = document.getElementById('enabledFilterCount');
@@ -25,6 +27,13 @@ const diagnostics = document.getElementById('adguardDiagnostics');
 const copyDiagnosticsButton = document.getElementById('copyDiagnostics');
 const adguardStartButton = document.getElementById('adguardStart');
 const adguardStopButton = document.getElementById('adguardStop');
+
+const PRESET_HELP = Object.freeze({
+  minimal: 'Core ad blocking with the smallest ruleset footprint.',
+  recommended: 'Balanced ads, tracking protection, URL tracking cleanup, and Czech/Slovak coverage.',
+  strict: 'Recommended plus cookie notices, popups, mobile app banners, other annoyances, and widgets. May break more sites.',
+  custom: 'Your manually selected filter combination.'
+});
 
 let dashboardState = null;
 let catalog = [];
@@ -52,6 +61,7 @@ function wireEvents() {
   adguardEnabledInput.addEventListener('change', applyControls);
   adguardScopeInput.addEventListener('change', applyControls);
   currentSiteProtectionInput.addEventListener('change', toggleCurrentSiteProtection);
+  filterPreset.addEventListener('change', applyFilterPreset);
   filterSearchInput.addEventListener('input', renderFilters);
   filterList.addEventListener('change', handleFilterChange);
   allowlistApplyButton.addEventListener('click', applyAllowlist);
@@ -119,6 +129,9 @@ function renderSettings() {
   rulesCount.textContent = String(dashboardState?.rulesCount ?? 0);
   const maxEnabled = dashboardState?.maxEnabledStaticRulesets;
   rulesetQuota.textContent = `${settings.filterIds.length} / ${Number.isInteger(maxEnabled) ? maxEnabled : '?'}`;
+  const presetName = AdguardFilters.presetForFilterIds(settings.filterIds);
+  filterPreset.value = presetName;
+  filterPresetHelp.textContent = PRESET_HELP[presetName] || PRESET_HELP.custom;
   renderFilters();
   renderDiagnostics();
 }
@@ -189,6 +202,37 @@ async function handleFilterChange(event) {
   }
 
   await applyControls();
+}
+
+async function applyFilterPreset() {
+  const presetName = filterPreset.value;
+  if (presetName === 'custom') {
+    return;
+  }
+
+  const desiredFilterIds = AdguardFilters.filterIdsForPreset(presetName);
+  const availableFilterIds = new Set(catalog.map((filter) => filter.id));
+  const filterIds = desiredFilterIds.filter((id) => availableFilterIds.has(id));
+
+  if (filterIds.length !== desiredFilterIds.length) {
+    renderSettings();
+    PopupApp.setStatus('This preset is not fully available in the packaged filter catalog', 'error');
+    return;
+  }
+
+  const maxEnabled = dashboardState?.maxEnabledStaticRulesets;
+  if (Number.isInteger(maxEnabled) && filterIds.length > maxEnabled) {
+    renderSettings();
+    PopupApp.setStatus(`Chrome allows at most ${maxEnabled} enabled static rulesets`, 'error');
+    return;
+  }
+
+  const current = PopupApp.getSettings().adguard;
+  await applyAdguard({ ...current, filterIds }, `${presetLabel(presetName)} preset applied`);
+}
+
+function presetLabel(value) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 async function applyControls() {
