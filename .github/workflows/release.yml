@@ -1,0 +1,91 @@
+name: Release extension
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - manifest.json
+      - package.json
+      - src/**
+      - lib/**
+      - scripts/**
+      - content.js
+      - content.css
+      - popup.html
+      - popup.css
+      - popup.js
+      - icons/**
+      - RELEASE_NOTES.md
+      - .github/workflows/release.yml
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies with current filter package
+        run: npm install --no-package-lock
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build extension with fresh AdGuard rules
+        run: npm run build
+
+      - name: Package extension
+        run: npm run package
+
+      - name: Verify archive layout
+        shell: bash
+        run: |
+          unzip -Z1 dist/release/yt-segments-sponsorship-autoskipper.zip | grep -Fx "manifest.json"
+
+      - name: Read extension version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./manifest.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create release when missing
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists. Refreshing assets."
+          else
+            gh release create "$TAG" \
+              --target "$GITHUB_SHA" \
+              --title "YT Segments & Sponsor Autoskipper $TAG" \
+              --notes-file RELEASE_NOTES.md
+          fi
+
+      - name: Upload release archives
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release upload "$TAG" \
+            dist/release/yt-segments-sponsorship-autoskipper.zip \
+            "dist/release/yt-segments-sponsorship-autoskipper-v${{ steps.version.outputs.version }}.zip" \
+            --clobber
