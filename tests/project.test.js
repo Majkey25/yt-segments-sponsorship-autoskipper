@@ -84,6 +84,8 @@ test('AdGuard tab exposes complete browser-side controls', () => {
     'adguardEnabled',
     'adguardScope',
     'currentSiteProtection',
+    'filterPreset',
+    'filterPresetHelp',
     'filterSearch',
     'filterList',
     'enabledFilterCount',
@@ -113,6 +115,24 @@ test('AdGuard tab exposes complete browser-side controls', () => {
   assert.match(html, /DNS-level protection requires a separate/);
   assert.match(html, /value="global"/);
   assert.match(html, /value="youtube"/);
+});
+
+test('AdGuard filter presets are documented and wired through the existing settings pipeline', () => {
+  const html = readText('popup.html');
+  const popupAdguard = readText('popup-adguard.js');
+
+  assert.match(html, /<option value="minimal">Minimal<\/option>/);
+  assert.match(html, /<option value="recommended">Recommended<\/option>/);
+  assert.match(html, /<option value="strict">Strict<\/option>/);
+  assert.match(html, /<option value="custom" disabled>Custom<\/option>/);
+  assert.match(html, /Core ad blocking/);
+  assert.match(html, /Balanced ads/);
+  assert.match(html, /May break more sites/);
+  assert.match(html, /manually selected filter combination/);
+  assert.match(popupAdguard, /presetForFilterIds/);
+  assert.match(popupAdguard, /filterIdsForPreset/);
+  assert.match(popupAdguard, /filterPreset\.addEventListener\('change'/);
+  assert.match(popupAdguard, /applyAdguard/);
 });
 
 test('background exposes all public AdGuard API operations and dashboard messages', () => {
