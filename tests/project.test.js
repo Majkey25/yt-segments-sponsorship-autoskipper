@@ -13,14 +13,14 @@ function readText(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8');
 }
 
-test('package and manifest identify YouTube Skipper v2.0.0', () => {
+test('package and manifest identify YouTube Skipper v2.0.1', () => {
   const packageJson = readJson('package.json');
   const manifest = readJson('manifest.json');
 
   assert.equal(packageJson.name, 'youtube-skipper');
-  assert.equal(packageJson.version, '2.0.0');
+  assert.equal(packageJson.version, '2.0.1');
   assert.equal(manifest.name, 'YouTube Skipper');
-  assert.equal(manifest.version, '2.0.0');
+  assert.equal(manifest.version, '2.0.1');
   assert.equal(packageJson.license, 'MIT');
   assert.deepEqual(Object.keys(packageJson.devDependencies), ['archiver']);
 });
@@ -42,8 +42,11 @@ test('manifest grants only the access required for YouTube segment skipping', ()
 test('popup contains only YouTube segment controls and attribution', () => {
   const html = readText('popup.html');
 
-  for (const id of ['youtubeEnabled', 'showMarkers', 'showToast', 'categories', 'youtubeReset', 'theme']) {
+  for (const id of ['youtubeEnabled', 'showMarkers', 'showToast', 'categories', 'youtubeReset']) {
     assert.match(html, new RegExp(`id="${id}"`));
+  }
+  for (const theme of ['light', 'dark', 'system']) {
+    assert.match(html, new RegExp(`data-theme-value="${theme}"`));
   }
   assert.match(html, /YouTube Skipper/);
   assert.match(html, /SponsorBlock/);

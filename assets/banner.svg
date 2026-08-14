@@ -1,11 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360">
+  <defs>
+    <linearGradient id="shield" x1="74" y1="44" x2="438" y2="477" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff365e"/>
+      <stop offset="1" stop-color="#c9002f"/>
+    </linearGradient>
+  </defs>
   <rect width="1200" height="360" rx="36" fill="#09090b"/>
   <path d="M0 312H1200" stroke="#242429" stroke-width="2"/>
-  <rect x="72" y="72" width="216" height="216" rx="50" fill="#141417" stroke="#2b2b31" stroke-width="2"/>
-  <path d="M121 126V220L190 173Z" fill="#fff"/>
-  <path d="M190 137 226 173 190 209M224 137 260 173 224 209" fill="none" stroke="#ff1744" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="112" y="242" width="137" height="9" rx="4.5" fill="#303035"/>
-  <rect x="142" y="242" width="44" height="9" rx="4.5" fill="#ff1744"/>
+  <g transform="translate(69 53) scale(.5)">
+    <path d="M256 44 438 112v132c0 117-72 193-182 233C146 437 74 361 74 244V112Z" fill="url(#shield)"/>
+    <path d="M156 168v164l126-82Z" fill="#fff"/>
+    <path d="m296 184 66 66-66 66" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
   <text x="354" y="132" fill="#ff1744" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20" font-weight="800" letter-spacing="4">FOCUSED YOUTUBE SEGMENT SKIPPING</text>
   <text x="354" y="200" fill="#fff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="52" font-weight="800">YouTube Skipper</text>
   <text x="354" y="249" fill="#a2a2aa" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="23">Skip sponsors and interruptions. Keep the video moving.</text>

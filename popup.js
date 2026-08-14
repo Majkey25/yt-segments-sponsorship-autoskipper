@@ -1,7 +1,7 @@
 const enabledInput = document.getElementById('youtubeEnabled');
 const markersInput = document.getElementById('showMarkers');
 const toastInput = document.getElementById('showToast');
-const themeInput = document.getElementById('theme');
+const themeButtons = document.querySelectorAll('[data-theme-value]');
 const categoriesContainer = document.getElementById('categories');
 const resetButton = document.getElementById('youtubeReset');
 const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
@@ -19,7 +19,9 @@ async function init() {
   enabledInput.addEventListener('change', saveFromControls);
   markersInput.addEventListener('change', saveFromControls);
   toastInput.addEventListener('change', saveFromControls);
-  themeInput.addEventListener('change', saveFromControls);
+  for (const button of themeButtons) {
+    button.addEventListener('click', saveTheme);
+  }
   resetButton.addEventListener('click', resetDefaults);
   systemTheme.addEventListener('change', () => {
     if (settings.theme === 'system') {
@@ -32,8 +34,7 @@ function render() {
   enabledInput.checked = settings.youtube.enabled;
   markersInput.checked = settings.youtube.showMarkers;
   toastInput.checked = settings.youtube.showToast;
-  themeInput.value = settings.theme;
-  applyTheme(settings.theme);
+  renderTheme();
   categoriesContainer.replaceChildren();
 
   for (const [name, definition] of Object.entries(SegmentSettings.CATEGORY_DEFINITIONS)) {
@@ -87,9 +88,18 @@ async function saveFromControls() {
       showToast: toastInput.checked,
       categories
     },
-    theme: themeInput.value
+    theme: settings.theme
   });
   applyTheme(settings.theme);
+  await chrome.storage.sync.set({ settings });
+}
+
+async function saveTheme(event) {
+  settings = SegmentSettings.sanitizeSettings({
+    ...settings,
+    theme: event.currentTarget.dataset.themeValue
+  });
+  renderTheme();
   await chrome.storage.sync.set({ settings });
 }
 
@@ -104,4 +114,11 @@ function applyTheme(theme) {
     ? (systemTheme.matches ? 'dark' : 'light')
     : theme;
   document.documentElement.dataset.theme = resolved;
+}
+
+function renderTheme() {
+  for (const button of themeButtons) {
+    button.setAttribute('aria-pressed', String(button.dataset.themeValue === settings.theme));
+  }
+  applyTheme(settings.theme);
 }
