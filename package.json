@@ -1,24 +1,15 @@
 {
-  "name": "yt-segments-sponsorship-autoskipper",
-  "version": "1.2.0",
+  "name": "youtube-skipper",
+  "version": "2.0.0",
   "private": true,
-  "description": "Skip YouTube segments and manage global AdGuard MV3 protection from one extension.",
-  "license": "GPL-3.0-only",
+  "description": "Automatically skip sponsors and other community-reported YouTube segments.",
+  "license": "MIT",
   "scripts": {
     "test": "node --test tests/*.test.js",
     "build": "node scripts/build.mjs",
     "package": "node scripts/package.mjs"
   },
-  "dependencies": {
-    "@adguard/api-mv3": "2.0.1"
-  },
   "devDependencies": {
-    "@adguard/dnr-rulesets": "latest",
-    "@adguard/tswebextension": "4.1.2",
-    "archiver": "^7.0.1",
-    "crypto-browserify": "^3.12.1",
-    "stream-browserify": "^3.0.0",
-    "vm-browserify": "^1.1.2",
-    "webpack": "^5.101.3"
+    "archiver": "^7.0.1"
   }
 }

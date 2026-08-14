@@ -13,13 +13,12 @@ The unpacked extension is generated in `dist/extension`.
 
 ## Rules
 
-- Keep changes focused.
-- Do not add telemetry, analytics, accounts, or remote executable code.
-- Keep the ad blocker scoped to YouTube.
+- Keep the extension limited to YouTube segment skipping.
+- Do not add analytics, telemetry, accounts, remote executable code, or broad host access.
 - Add or update tests for behavior changes.
-- Run `npm test` before opening a pull request.
-- Do not commit `node_modules`, `.build`, or `dist`.
+- Run `npm test`, `npm run build`, and `npm run package` before opening a pull request.
+- Do not commit `node_modules` or `dist`.
 
 ## Releases
 
-The GitHub Actions release workflow builds fresh AdGuard MV3 rules, tests the project, packages the extension, and publishes release ZIP files.
+GitHub Actions tests the project, builds the static extension, and publishes stable and versioned release ZIP files.

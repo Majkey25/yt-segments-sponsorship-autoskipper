@@ -1,20 +1,12 @@
-const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
-const tabButtons = [...document.querySelectorAll('[role="tab"]')];
-const tabPanels = [...document.querySelectorAll('[role="tabpanel"]')];
+const enabledInput = document.getElementById('youtubeEnabled');
+const markersInput = document.getElementById('showMarkers');
+const toastInput = document.getElementById('showToast');
 const themeInput = document.getElementById('theme');
+const categoriesContainer = document.getElementById('categories');
+const resetButton = document.getElementById('youtubeReset');
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
 
 let settings = SegmentSettings.sanitizeSettings();
-
-window.PopupApp = {
-  getSettings: () => settings,
-  setSettings(next) {
-    settings = SegmentSettings.sanitizeSettings(next);
-  },
-  saveSettings,
-  setStatus,
-  applyTheme,
-  activateTab
-};
 
 window.addEventListener('DOMContentLoaded', init);
 
@@ -22,93 +14,89 @@ async function init() {
   const stored = await chrome.storage.sync.get('settings');
   settings = SegmentSettings.sanitizeSettings(stored.settings);
   await chrome.storage.sync.set({ settings });
+  render();
 
-  themeInput.value = settings.theme;
-  applyTheme(settings.theme);
-  themeInput.addEventListener('change', saveTheme);
+  enabledInput.addEventListener('change', saveFromControls);
+  markersInput.addEventListener('change', saveFromControls);
+  toastInput.addEventListener('change', saveFromControls);
+  themeInput.addEventListener('change', saveFromControls);
+  resetButton.addEventListener('click', resetDefaults);
   systemTheme.addEventListener('change', () => {
     if (settings.theme === 'system') {
       applyTheme('system');
     }
   });
+}
 
-  for (const button of tabButtons) {
-    button.addEventListener('click', () => activateTab(button.id));
-    button.addEventListener('keydown', handleTabKeydown);
+function render() {
+  enabledInput.checked = settings.youtube.enabled;
+  markersInput.checked = settings.youtube.showMarkers;
+  toastInput.checked = settings.youtube.showToast;
+  themeInput.value = settings.theme;
+  applyTheme(settings.theme);
+  categoriesContainer.replaceChildren();
+
+  for (const [name, definition] of Object.entries(SegmentSettings.CATEGORY_DEFINITIONS)) {
+    const row = document.createElement('label');
+    row.className = 'category-row';
+
+    const identity = document.createElement('span');
+    identity.className = 'category-identity';
+
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    dot.style.background = definition.color;
+
+    const label = document.createElement('span');
+    label.textContent = definition.label;
+    identity.append(dot, label);
+
+    const select = document.createElement('select');
+    select.dataset.category = name;
+    select.setAttribute('aria-label', `${definition.label} behavior`);
+    select.append(
+      option('auto', 'Auto skip'),
+      option('button', 'Show button'),
+      option('ignore', 'Ignore')
+    );
+    select.value = settings.youtube.categories[name];
+    select.addEventListener('change', saveFromControls);
+
+    row.append(identity, select);
+    categoriesContainer.appendChild(row);
+  }
+}
+
+function option(value, label) {
+  const item = document.createElement('option');
+  item.value = value;
+  item.textContent = label;
+  return item;
+}
+
+async function saveFromControls() {
+  const categories = { ...settings.youtube.categories };
+  for (const select of categoriesContainer.querySelectorAll('select[data-category]')) {
+    categories[select.dataset.category] = select.value;
   }
 
-  const local = await chrome.storage.local.get('popupTab');
-  const initialTab = local.popupTab === 'adguardTab' ? 'adguardTab' : 'youtubeTab';
-  activateTab(initialTab, false);
-
-  await window.PopupYoutube?.init?.();
-  await window.PopupAdguard?.init?.();
-
-  chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName !== 'sync' || !changes.settings) {
-      return;
-    }
-    settings = SegmentSettings.sanitizeSettings(changes.settings.newValue);
-    themeInput.value = settings.theme;
-    applyTheme(settings.theme);
-    window.PopupYoutube?.render?.();
-    window.PopupAdguard?.renderSettings?.();
-  });
-}
-
-async function saveSettings(next) {
-  settings = SegmentSettings.sanitizeSettings(next);
-  await chrome.storage.sync.set({ settings });
-  return settings;
-}
-
-async function saveTheme() {
-  const next = SegmentSettings.sanitizeSettings({
-    ...settings,
+  settings = SegmentSettings.sanitizeSettings({
+    youtube: {
+      enabled: enabledInput.checked,
+      showMarkers: markersInput.checked,
+      showToast: toastInput.checked,
+      categories
+    },
     theme: themeInput.value
   });
-  await saveSettings(next);
-  applyTheme(next.theme);
+  applyTheme(settings.theme);
+  await chrome.storage.sync.set({ settings });
 }
 
-function activateTab(tabId, persist = true) {
-  const active = tabButtons.find((button) => button.id === tabId) || tabButtons[0];
-
-  for (const button of tabButtons) {
-    const selected = button === active;
-    button.classList.toggle('is-active', selected);
-    button.setAttribute('aria-selected', String(selected));
-    button.tabIndex = selected ? 0 : -1;
-  }
-
-  for (const panel of tabPanels) {
-    panel.hidden = panel.getAttribute('aria-labelledby') !== active.id;
-  }
-
-  if (persist) {
-    void chrome.storage.local.set({ popupTab: active.id });
-  }
-}
-
-function handleTabKeydown(event) {
-  if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) {
-    return;
-  }
-  event.preventDefault();
-  const currentIndex = tabButtons.indexOf(event.currentTarget);
-  const direction = event.key === 'ArrowRight' ? 1 : -1;
-  const nextIndex = (currentIndex + direction + tabButtons.length) % tabButtons.length;
-  tabButtons[nextIndex].focus();
-  activateTab(tabButtons[nextIndex].id);
-}
-
-function setStatus(message, type = 'info') {
-  const status = document.getElementById('adguardStatus');
-  if (!status) {
-    return;
-  }
-  status.textContent = message || '';
-  status.dataset.type = type;
+async function resetDefaults() {
+  settings = SegmentSettings.sanitizeSettings(SegmentSettings.DEFAULT_SETTINGS);
+  await chrome.storage.sync.set({ settings });
+  render();
 }
 
 function applyTheme(theme) {

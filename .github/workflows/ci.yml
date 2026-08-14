@@ -21,10 +21,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: https://registry.npmjs.org
+          cache: npm
 
       - name: Install dependencies
-        run: npm install --no-package-lock
+        run: npm ci
 
       - name: Run tests
         run: npm test
@@ -38,11 +38,7 @@ jobs:
       - name: Verify release archive root
         shell: bash
         run: |
-          unzip -Z1 dist/release/yt-segments-sponsorship-autoskipper.zip | grep -Fx "manifest.json"
-          test -f dist/extension/manifest.json
+          unzip -Z1 dist/release/youtube-skipper.zip | grep -Fx "manifest.json"
           test -f dist/extension/background.js
-          test -f dist/extension/adguard-content.js
-          test -f dist/extension/adguard-assistant.js
-          test -f dist/extension/blocking-page.html
-          test -f dist/extension/filters/catalog.json
-          node -e "const m=require('./dist/extension/manifest.json'); const r=m.declarative_net_request?.rule_resources||[]; if(r.length < 2 || r.length > 100) process.exit(1)"
+          test -f dist/extension/content.js
+          test -f dist/extension/lib/sponsorblock.js

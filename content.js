@@ -141,7 +141,7 @@ function handlePlaybackPosition() {
     const key = `${autoSegment.UUID}:${Math.floor(currentTime * 10)}`;
     if (state.lastAutoKey !== key) {
       state.lastAutoKey = key;
-      skipSegment(autoSegment, true);
+      skipSegment(autoSegment);
     }
     return;
   }
@@ -157,7 +157,7 @@ function handlePlaybackPosition() {
   }
 }
 
-function skipSegment(segment, automatic) {
+function skipSegment(segment) {
   const video = state.video;
   if (!video || !Number.isFinite(segment.end) || segment.end <= video.currentTime) {
     return;
@@ -168,8 +168,7 @@ function skipSegment(segment, automatic) {
   hideSkipButton();
 
   if (state.settings.youtube.showToast) {
-    const prefix = automatic ? 'Skipped' : 'Skipped';
-    showToast(`${prefix} ${labelForCategory(segment.category)} · ${SegmentUtils.secondsLabel(skippedSeconds)}`);
+    showToast(`Skipped ${labelForCategory(segment.category)} · ${SegmentUtils.secondsLabel(skippedSeconds)}`);
   }
 }
 
@@ -195,7 +194,7 @@ function showSkipButton(segment) {
     state.skipButton.addEventListener('click', () => {
       const target = state.skipButton?.segment;
       if (target) {
-        skipSegment(target, false);
+        skipSegment(target);
       }
     });
     player.appendChild(state.skipButton);

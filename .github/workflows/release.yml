@@ -7,26 +7,20 @@ on:
     paths:
       - manifest.json
       - package.json
-      - src/**
+      - package-lock.json
       - lib/**
       - scripts/**
+      - background.js
       - content.js
       - content.css
       - popup.html
       - popup.css
       - popup.js
-      - popup-youtube.js
-      - popup-adguard.js
-      - blocking-page.html
-      - blocking-page.css
-      - blocking-page.js
       - icons/**
       - assets/**
       - README.md
       - RELEASE_NOTES.md
       - .github/workflows/release.yml
-  schedule:
-    - cron: "17 4 * * *"
   workflow_dispatch:
 
 permissions:
@@ -44,60 +38,44 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: https://registry.npmjs.org
+          cache: npm
 
-      - name: Install dependencies with current filter package
-        run: npm install --no-package-lock
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Run tests
-        run: npm test
-
-      - name: Build extension with fresh AdGuard rules
-        run: npm run build
-
-      - name: Package extension
-        run: npm run package
+      - name: Test and package
+        run: |
+          npm test
+          npm run build
+          npm run package
 
       - name: Verify archive layout
         shell: bash
         run: |
-          unzip -Z1 dist/release/yt-segments-sponsorship-autoskipper.zip | grep -Fx "manifest.json"
+          unzip -Z1 dist/release/youtube-skipper.zip | grep -Fx "manifest.json"
           test -f dist/extension/background.js
-          test -f dist/extension/adguard-content.js
-          test -f dist/extension/adguard-assistant.js
-          test -f dist/extension/blocking-page.html
-          test -f dist/extension/filters/catalog.json
+          test -f dist/extension/content.js
 
       - name: Read extension version
         id: version
         shell: bash
         run: |
-          VERSION=$(node -p "require('./manifest.json').version")
+          VERSION=$(jq -r '.version' manifest.json)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Create release when missing
+      - name: Create or refresh release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
         run: |
           if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "Release $TAG already exists. Refreshing assets."
+            echo "Release $TAG exists. Refreshing assets."
           else
-            gh release create "$TAG" \
-              --target "$GITHUB_SHA" \
-              --title "YT Segments & Sponsor Autoskipper $TAG" \
-              --notes-file RELEASE_NOTES.md
+            gh release create "$TAG" --target "$GITHUB_SHA" --title "YouTube Skipper $TAG" --notes-file RELEASE_NOTES.md
           fi
-
-      - name: Upload release archives
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.version.outputs.tag }}
-        run: |
           gh release upload "$TAG" \
-            dist/release/yt-segments-sponsorship-autoskipper.zip \
-            "dist/release/yt-segments-sponsorship-autoskipper-v${{ steps.version.outputs.version }}.zip" \
+            dist/release/youtube-skipper.zip \
+            "dist/release/youtube-skipper-v${{ steps.version.outputs.version }}.zip" \
             --clobber

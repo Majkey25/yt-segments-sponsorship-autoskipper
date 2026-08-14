@@ -1,175 +1,70 @@
 <p align="center">
-  <img src="assets/banner.svg" alt="YT Segments & Sponsor Autoskipper banner" width="100%">
+  <img src="assets/banner.svg" alt="YouTube Skipper banner" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://github.com/Majkey25/yt-segments-sponsorship-autoskipper/releases/latest/download/yt-segments-sponsorship-autoskipper.zip">
-    <img src="https://img.shields.io/badge/DOWNLOAD-LATEST_RELEASE-ff0033?style=for-the-badge" alt="Download latest release">
-  </a>
+  <a href="https://github.com/Majkey25/youtube-skipper/releases/latest/download/youtube-skipper.zip"><img src="https://img.shields.io/badge/DOWNLOAD-LATEST_RELEASE-ff1744?style=for-the-badge" alt="Download latest release"></a>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Manifest-V3-black?style=flat-square" alt="Manifest V3">
   <img src="https://img.shields.io/badge/Chrome-121%2B-black?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome 121+">
-  <img src="https://img.shields.io/github/v/release/Majkey25/yt-segments-sponsorship-autoskipper?style=flat-square&color=black" alt="Latest release">
-  <img src="https://img.shields.io/github/license/Majkey25/yt-segments-sponsorship-autoskipper?style=flat-square&color=black" alt="GPL-3.0 license">
+  <img src="https://img.shields.io/github/actions/workflow/status/Majkey25/youtube-skipper/ci.yml?branch=main&style=flat-square&label=build" alt="Build status">
+  <img src="https://img.shields.io/github/v/release/Majkey25/youtube-skipper?style=flat-square&color=black" alt="Latest release">
+  <img src="https://img.shields.io/github/license/Majkey25/youtube-skipper?style=flat-square&color=black" alt="MIT license">
 </p>
+
+<p align="center">A focused Chrome extension that skips sponsors and other community-reported YouTube segments.</p>
 
 <p align="center">
-  A two-tab browser cleanup extension: YouTube Segments plus global AdGuard MV3 protection.
+  <img src="assets/preview.svg" alt="YouTube Skipper popup preview" width="760">
 </p>
 
-## Download
+## What it does
 
-**[Download the latest extension ZIP](https://github.com/Majkey25/yt-segments-sponsorship-autoskipper/releases/latest/download/yt-segments-sponsorship-autoskipper.zip)**
+- Automatically skips selected SponsorBlock categories.
+- Shows a native-like manual skip button for categories you want to review first.
+- Adds optional timeline markers and compact skip notices.
+- Supports regular YouTube, YouTube Music, and mobile YouTube pages.
+- Uses SponsorBlock's privacy-preserving hash-prefix API endpoint.
+- Adds no analytics, telemetry, accounts, ad filtering, or unrelated browser access.
 
-> **Important:** use the ZIP from **Releases → Assets**. Do not use GitHub's automatically generated **Source code** ZIP and do not load the repository source folder directly in Chrome. Runtime bundles such as `adguard-content.js`, `adguard-assistant.js`, the generated filter catalog, and packaged AdGuard rules are created during the release build.
+## Install
 
-The **GitHub Release ZIP** remains a supported fallback distribution path. Chrome cannot install an unsigned ZIP directly, so extract it first and load the extracted folder through Developer mode.
+1. Download **[youtube-skipper.zip](https://github.com/Majkey25/youtube-skipper/releases/latest/download/youtube-skipper.zip)** from the latest release.
+2. Extract it to a permanent folder.
+3. Open `chrome://extensions`.
+4. Enable **Developer mode**.
+5. Select **Load unpacked** and choose the extracted folder containing `manifest.json`.
+6. Refresh open YouTube tabs.
 
-## Install in Chrome
+Chrome cannot install an unsigned ZIP directly. Use the GitHub Release asset, not GitHub's automatically generated source archive.
 
-1. Open the latest GitHub release.
-2. Under **Assets**, download `yt-segments-sponsorship-autoskipper.zip`.
-3. Extract it to a permanent folder.
-4. Open `chrome://extensions`.
-5. Enable **Developer mode**.
-6. Click **Load unpacked**.
-7. Select the extracted folder that directly contains `manifest.json`, `background.js`, and `adguard-content.js`.
-8. Pin the extension from the Extensions menu.
-9. Refresh open tabs.
+## Segment modes
 
-## Two-tab control center
-
-### YouTube Segments
-
-The **YouTube Segments** tab contains the video-specific behavior:
-
-- master segment skipping toggle,
-- per-category **Auto skip**, **Show button**, and **Ignore** modes,
-- timeline markers,
-- skip notices,
-- reset to safe defaults.
-
-Manual segment skips use a **native-like** YouTube player control with neutral styling and a skip icon. The extension owns the button markup and styling rather than depending on private YouTube control classes.
-
-The UI uses product-owned names. Segment data is still provided by SponsorBlock and is credited in the popup, README, NOTICE, and source.
-
-### AdGuard tab
-
-The **AdGuard tab** is a browser-side control center for the capabilities exposed by `@adguard/api-mv3`:
-
-- global protection on by default,
-- optional **YouTube only** scope,
-- current-site protection toggle backed by the allowlist,
-- packaged filter list selection,
-- quick filter presets,
-- loaded rule count and ruleset quota visibility,
-- editable allowlist,
-- editable custom user rules,
-- AdGuard Assistant element blocker,
-- bounded in-memory request log,
-- engine start and stop diagnostics,
-- current configuration state and sanitized diagnostics,
-- document blocking page support for `$document` rules.
-
-The build discovers the Chromium MV3 rulesets shipped by the current `@adguard/dnr-rulesets` package, declares up to Chrome's static ruleset manifest limit, and enables a balanced recommended default for new configurations. Filter selections are still subject to Chromium runtime rule and ruleset quotas.
-
-## AdGuard controls
-
-### Filters and presets
-
-The extension generates `filters/catalog.json` at build time from the packaged AdGuard Chromium MV3 rulesets. Available filters can include ad blocking, privacy and tracking, URL tracking, cookie notices, annoyances, security lists, mobile filters, language-specific filters, and other lists present in the upstream package.
-
-The popup provides four preset states:
-
-| Preset | Filter IDs | Purpose |
-| --- | --- | --- |
-| **Minimal** | `2` | Core ad blocking with the smallest ruleset footprint. |
-| **Recommended** | `2, 3, 17, 105` | Balanced ads, tracking protection, URL tracking cleanup, and Czech/Slovak site coverage. This is the default for new configurations and settings restored to defaults. |
-| **Strict** | `2, 3, 17, 18, 19, 20, 21, 22, 105` | Recommended plus cookie notices, popups, mobile app banners, other annoyances, and widgets. This can break more sites. |
-| **Custom** | User selected | Shown automatically when the enabled filters do not exactly match a named preset. |
-
-Updating to v1.2.0 does **not** silently replace an existing saved filter selection. Existing choices remain intact until you select another preset or change filter checkboxes yourself.
-
-The UI does not invent filters that were not packaged in the release. A named preset is applied only when all of its required filters exist in the packaged catalog.
-
-### Allowlist
-
-The allowlist accepts one domain per line. In **Global** scope, allowlisted domains are excluded from filtering. The popup can also allow or re-protect the current site with one click.
-
-When the scope is **YouTube only**, the AdGuard API blocklist mode takes precedence, so global allowlist behavior is not active.
-
-### User rules
-
-The **User rules** editor accepts AdGuard filtering syntax and applies the rules through the AdGuard MV3 API. Previous settings remain intact if reconfiguration fails.
-
-Manifest V3 restrictions still apply. The extension does not claim that arbitrary remote JavaScript can be executed.
-
-### AdGuard Assistant
-
-**Block element on this page** opens the AdGuard Assistant on the active HTTP or HTTPS page. Rules created by Assistant are appended to the user's custom rules and persisted only after the configuration applies successfully.
-
-### Request log
-
-The **Request log** shows blocked requests from the current browser session, including request URL, type, filter information when available, and AdGuard company category metadata when provided.
-
-Duplicate AdGuard events are merged by request ID. The log is capped at 200 entries and is kept in memory rather than synced to browser storage.
-
-### Document blocking page
-
-Rules using the `$document` modifier can redirect to a local blocking page that displays the blocked destination, triggering rule, and filter ID. Query parameters are rendered as text, never as HTML. A user may explicitly allow the blocked site's hostname and continue.
-
-## DNS boundary
-
-This extension does **not** expose fake DNS settings. DNS-over-HTTPS, DNS-over-TLS, DNSCrypt, AdGuard DNS, AdGuard Home, parental control, and operating-system network controls are separate DNS or native-product features and are not part of `@adguard/api-mv3`.
-
-For DNS-level filtering, use a separate DNS or native AdGuard product.
-
-## Default segment behavior
-
-| Category | Default |
+| Mode | Behavior |
 | --- | --- |
-| Sponsor | Auto skip |
-| Self promotion | Auto skip |
-| Interaction reminder | Show button |
-| Intro | Show button |
-| Outro / credits | Show button |
-| Preview / recap | Show button |
-| Hook | Show button |
-| Non music | Show button |
-| Filler | Ignore |
+| **Auto skip** | Jumps to the end as soon as the segment starts. |
+| **Show button** | Displays a neutral YouTube-style skip control. |
+| **Ignore** | Leaves the segment untouched. |
 
-Filler remains ignored by default because it is an aggressive category and can remove content some users still want to watch.
-
-## Privacy
-
-Segment requests use SponsorBlock's privacy-preserving hash-prefix endpoint. The exact YouTube video ID is not sent as the API request path, and the extension keeps only the exact matching video from the returned candidates.
-
-The AdGuard request log is session-only and bounded. No analytics or telemetry are added by this project.
+Default automatic categories are **Sponsor** and **Self promotion**. Filler defaults to **Ignore** because it can remove content viewers may want to keep.
 
 ## Permissions
 
-| Permission | Why it is required |
+| Access | Reason |
 | --- | --- |
-| `storage` | Saves YouTube, AdGuard, filter, allowlist, custom rule, theme, and popup state. |
-| `tabs` | Resolves the active page for Assistant and current-site controls. |
-| `webRequest` | Enables AdGuard blocked-request events used by the request log. |
-| `webNavigation` | Supports AdGuard scriptlet and navigation timing. |
-| `unlimitedStorage` | Provides space for filtering assets and engine state. |
-| `scripting` | Supports MV3 content filtering and Assistant injection. |
-| `declarativeNetRequest` | Applies packaged network filtering rules. |
-| `declarativeNetRequestFeedback` | Lets the AdGuard runtime observe DNR outcomes where the browser permits it. |
-| `<all_urls>` host access | Required for default global AdGuard filtering. |
+| `storage` | Saves segment modes, marker/notices settings, and theme. |
+| `https://sponsor.ajay.app/*` | Fetches crowdsourced segment timestamps. |
+| YouTube content-script matches | Runs the skipper only on supported YouTube pages. |
 
-## Updating an unpacked install
+The extension does not request access to every website.
 
-GitHub Releases cannot silently update an extension installed with **Load unpacked**.
+## Privacy
 
-1. Download the newest GitHub Release ZIP.
-2. Replace the files in your existing extension folder.
-3. Open `chrome://extensions`.
-4. Click the reload button on the extension card.
+The worker hashes the YouTube video ID and sends only the first four SHA-256 characters in the SponsorBlock request path. It then selects the exact video from the returned prefix group. Segment responses are cached in memory for ten minutes, with a maximum of 50 entries.
+
+No browsing history, analytics, or telemetry is collected.
 
 ## Development
 
@@ -182,22 +77,12 @@ npm run build
 npm run package
 ```
 
-The unpacked extension is generated in `dist/extension/` and release ZIPs are generated in `dist/release/`.
-
-## Tests
-
-The Node test suite covers settings migration, segment parsing, AdGuard configuration, preset behavior, allowlist normalization, request-log deduplication, filter catalog validation, two-tab popup contracts, native-like player controls, Assistant and blocking-page packaging, manifest scope, and release metadata.
-
-## Releases and filter refresh
-
-GitHub Actions runs tests, builds fresh AdGuard DNR assets, packages the extension, verifies the archive root, and publishes both stable and versioned GitHub Release ZIP assets. The existing release path remains available as the fallback installation method.
+The unpacked extension is written to `dist/extension/`. Release ZIP files are written to `dist/release/`.
 
 ## Attribution
 
-SponsorBlock provides the crowdsourced YouTube segment API. AdGuard provides the MV3 filtering engine, ruleset tooling, Assistant, and filtering assets. See [NOTICE.md](NOTICE.md) for third-party notices.
-
-This project is independent and is not affiliated with YouTube, Google, SponsorBlock, or AdGuard.
+[SponsorBlock](https://github.com/ajayyy/SponsorBlock) provides the crowdsourced segment API. This project is independent and is not affiliated with YouTube, Google, or SponsorBlock.
 
 ## License
 
-Licensed under **GPL-3.0-only**. The GPL license is used because the distributed filtering build incorporates GPL-licensed AdGuard components and assets.
+MIT. See [LICENSE](LICENSE).
